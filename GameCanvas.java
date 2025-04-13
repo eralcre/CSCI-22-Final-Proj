@@ -1,6 +1,6 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
 
 public class GameCanvas extends JPanel {
 	private int width, height;
@@ -10,7 +10,7 @@ public class GameCanvas extends JPanel {
 		width = w;
 		height = h;
         setFocusable(true);
-        player = new Player(200, 200, 40, 40, Color.GREEN);
+        player = new Player1(200, 200, 100, 100);
         setupKeyBindings();
     }
 
@@ -32,7 +32,8 @@ public class GameCanvas extends JPanel {
     public class UpAction extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            player.move(player.getX(), player.getY() - 10);
+            player.moveU();
+            player.appearance("B");
 			repaint();
         }
     }
@@ -40,7 +41,8 @@ public class GameCanvas extends JPanel {
     public class DownAction extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            player.move(player.getX(), player.getY() + 10);
+            player.moveD();
+            player.appearance("F");
 			repaint();
         }
     }
@@ -48,7 +50,8 @@ public class GameCanvas extends JPanel {
     public class LeftAction extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            player.move(player.getX() - 10, player.getY());
+            player.moveL();
+            player.appearance("L");
 			repaint();
         }
     }
@@ -56,7 +59,8 @@ public class GameCanvas extends JPanel {
     public class RightAction extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            player.move(player.getX() + 10, player.getY());
+            player.moveR();
+            player.appearance("R");
 			repaint();
         }
     }
@@ -72,7 +76,6 @@ public class GameCanvas extends JPanel {
         RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON);
     g2d.setRenderingHints(rh);
-
     player.draw(g2d);
     }
 }

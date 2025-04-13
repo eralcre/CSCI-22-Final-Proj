@@ -1,29 +1,22 @@
 import java.awt.*;
 
-public class Player {
+public abstract class Player {
     private int x, y, width, height;
-    private Color color;
 
-    public Player(int x, int y, int width, int height, Color color) {
-        this.x = x;
-        this.y = y;
-		this.width = width;
-		this.height = height;
-        this.color = color;
+    public abstract void appearance(String position);
+    public abstract Image characterImage();
+
+    public void draw(Graphics g){
+        g.drawImage(characterImage(), getX(), getY(), getWidth(), getHeight(), null);
     }
 
-    public void move(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
+    public abstract void moveU();
+    public abstract void moveD();
+    public abstract void moveL();
+    public abstract void moveR();
 
-    public int getX() {return x;}
-    public int getY() {return y;}
-    public int getWidth() {return width;}
-    public int getHeight() {return height;}
-
-    public void draw(Graphics g) {
-        g.setColor(color);
-        g.fillRect(x, y, width, height);
-    }
+    public abstract int getX();
+    public abstract int getY();
+    public abstract int getWidth();
+    public abstract int getHeight();
 }
