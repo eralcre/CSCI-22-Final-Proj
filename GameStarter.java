@@ -32,11 +32,10 @@ public class GameStarter {
 
     public void waitForOtherPlayer(){
         try{
-            System.out.println(dataIn.readUTF()+" ");
-            System.out.println("WAITING FOR OTHER PLAYER...");
-            while(true){
-                
-            }
+			System.out.println("WAITING FOR OTHER PLAYER...");
+			System.out.println(dataIn.readUTF()+" ");
+			String playerNumber = dataIn.readUTF();
+			gameStart = new GameFrame(playerNumber);
         }catch(IOException e){
             System.out.println("IOException from chat() method.");
         }
@@ -56,5 +55,6 @@ public class GameStarter {
         GameStarter cc = new GameStarter();
         cc.closeSocketOnShutdown();
         cc.ConnectToGameServer();
+	    cc.waitForOtherPlayer();
     }
 }

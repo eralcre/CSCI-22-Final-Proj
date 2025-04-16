@@ -38,39 +38,41 @@ public class GameServer {
         }
     }
 
-    // private class GameSession implements Runnable{
-    //     private Socket p1Socket, p2Socket;
-    //     private DataInputStream dataIn1, dataIn2;
-    //     private DataOutputStream dataOut1, dataOut2;
+    private class GameSession implements Runnable{
+		private Socket p1Socket, p2Socket;
+		private DataInputStream dataIn1, dataIn2;
+		private DataOutputStream dataOut1, dataOut2;
 
-    //     public GameSession (Socket p1, Socket p2){
-    //         p1Socket = p1;
-    //         p2Socket = p2;
-    //         try{
-    //             dataIn1 = new DataInputStream(p1Socket.getInputStream());
-    //             dataOut1 = new DataOutputStream(p1Socket.getOutputStream());
-    //             dataIn2 = new DataInputStream(p2Socket.getInputStream());
-    //             dataOut2 = new DataOutputStream(p2Socket.getOutputStream());
-    //         } catch (IOException ex){
-    //             System.out.println("IOException from GameSession constructor.");
-    //         }
-    //     }
+		public GameSession (Socket p1, Socket p2){
+			p1Socket = p1;
+			p2Socket = p2;
+			try{
+				dataIn1 = new DataInputStream(p1Socket.getInputStream());
+				dataOut1 = new DataOutputStream(p1Socket.getOutputStream());
+				dataIn2 = new DataInputStream(p2Socket.getInputStream());
+				dataOut2 = new DataOutputStream(p2Socket.getOutputStream());
+			} catch (IOException ex){
+				System.out.println("IOException from GameSession constructor.");
+			}
+		}
 
-    //     public void startThread(){
-    //         Thread t = new Thread(this);
-    //         t.start();
-    //     }
+		public void startThread(){
+			Thread t = new Thread(this);
+			t.start();
+		}
 
-    //     public void run(){
-    //         try{
-    //             dataOut1.writeUTF("HELLO! WELCOME TO [GAME NAME]! You are Player 1");
-    //             dataOut2.writeUTF("HELLO! WELCOME TO [GAME NAME]! You are Player 2");
-    //             System.out.println("2 players are in this game session.");
-    //         } catch(IOException ex){
-    //             System.out.println("IOException from ClientRunnable's run() method.");
-    //         }
-    //     }
-    // }
+		public void run(){
+			try{
+				dataOut1.writeUTF("HELLO! WELCOME TO [GAME NAME]! You are Player 1");
+				dataOut2.writeUTF("HELLO! WELCOME TO [GAME NAME]! You are Player 2");
+				dataOut1.writeUTF("Player 1");
+				dataOut2.writeUTF("Player 2");
+				System.out.println("2 players are in this game session.");
+			} catch(IOException ex){
+				System.out.println("IOException from ClientRunnable's run() method.");
+			}
+		}
+    }
 
     public void closeSocketsOnShutdown(){
         Runtime.getRuntime().addShutdownHook(new Thread(()->{
