@@ -1,5 +1,5 @@
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class GameFrame{
     private GameCanvas gc;
@@ -10,8 +10,8 @@ public class GameFrame{
 		this.playerNumber = playerNumber;
 		int w = 1024;
 		int h = 768;
-		JFrame frame = new JFrame();
-		GameCanvas gc = new GameCanvas(w, h, playerNumber);
+		frame = new JFrame();
+		gc = new GameCanvas(w, h, playerNumber);
 		gc.setPreferredSize(new Dimension(w, h));
 		frame.setTitle("blablablablablblababoom");
 		frame.add(gc);
