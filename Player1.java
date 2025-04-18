@@ -10,26 +10,26 @@ public class Player1 extends Player {
         this.y = y;
         width = w;
         height = h;
-        character = new ImageIcon("Player1F.png").getImage();
+        character = new ImageIcon("P1/Player1F.png").getImage();
     }
 
     @Override
     public void appearance(String position){
         switch (position) {
             case "F":
-                character = new ImageIcon("Player1F.png").getImage();
+                character = new ImageIcon("P1/Player1F.png").getImage();
                 break;
             case "B":
-                character = new ImageIcon("Player1B.png").getImage();
+                character = new ImageIcon("P1/Player1B.png").getImage();
                 break;
             case "L":
-                character = new ImageIcon("Player1L.png").getImage();
+                character = new ImageIcon("P1/Player1L.png").getImage();
                 break;
             case "R":
-                character = new ImageIcon("Player1R.png").getImage();
+                character = new ImageIcon("P1/Player1R.png").getImage();
                 break;
             default:
-                character = new ImageIcon("Player1F.png").getImage();
+                character = new ImageIcon("P1/Player1F.png").getImage();
         }
     }
 
