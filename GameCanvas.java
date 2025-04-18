@@ -14,8 +14,13 @@ public class GameCanvas extends JComponent {
 
         if (playerNumber.equals("Player 1")){
             player = new Player1(200, 200, 100, 100);
+            //add bg image for this player here
+            //add object-clue images
+            //call method here that will set listeners for when they click the objects
         } else if (playerNumber.equals("Player 2")) {
             player = new Player2(200, 200, 100, 100);
+            //add bg image for this player here that should be conditioned depending on the level
+            //call method that will set listeneners depending on the level puzzle
         }
 
         setFocusable(true);
