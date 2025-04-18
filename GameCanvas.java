@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class GameCanvas extends JPanel {
+public class GameCanvas extends JComponent {
 	private int width, height;
 	private String playerNumber;
 	
@@ -17,5 +17,17 @@ public class GameCanvas extends JPanel {
         } else if (playerNumber.equals("Player 2")) {
             add(new P2Canvas(width, height), BorderLayout.CENTER);
         }
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+		Graphics2D g2d = (Graphics2D) g;
+
+		RenderingHints rh = new RenderingHints(
+			RenderingHints.KEY_ANTIALIASING,
+			RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setRenderingHints(rh);
+
+        
     }
 }
