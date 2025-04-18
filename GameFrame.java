@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class GameFrame extends JFrame{
+public class GameFrame{
     private GameCanvas gc;
 	private JFrame frame;
 	private String playerNumber;
