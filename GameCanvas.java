@@ -6,7 +6,7 @@ public class GameCanvas extends JComponent {
 	private int width, height;
 	private String playerNumber;
     private Player player;
-    private Room clueRoom;
+    private Room room;
 	
     public GameCanvas(int w, int h, String playerNumber) {
 		this.playerNumber = playerNumber;
@@ -15,7 +15,7 @@ public class GameCanvas extends JComponent {
 
         if (playerNumber.equals("Player 1")){
             player = new Player1(200, 200, 100, 100);
-            clueRoom = new ClueRoom();
+            room = new ClueRoom();
             //call method here that will set listeners for when they click the objects
         } else if (playerNumber.equals("Player 2")) {
             player = new Player2(200, 200, 100, 100);
