@@ -87,6 +87,7 @@ public class GameCanvas extends JComponent {
 			RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setRenderingHints(rh);
 
+        room.draw(g2d);
         player.draw(g2d);
     }
 }

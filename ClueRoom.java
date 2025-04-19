@@ -20,6 +20,8 @@ public class ClueRoom implements Room{
         plant = new ImageIcon("ClueRoom/Plant.png").getImage();
         table = new ImageIcon("ClueRoom/Table.png").getImage();
         potions = new ImageIcon("ClueRoom/Potions.png").getImage();
+
+        createObjs();
     }
 
     @Override
@@ -37,16 +39,18 @@ public class ClueRoom implements Room{
 
     @Override
     public void draw(Graphics g){
-        for(GameObject obj:clueRoomObjs){
-            obj.draw(g);
-        }
-        g.drawImage(bg, 0, 0, 1024, 768, null);
+        g.drawImage(bg, 0, 0, 1024, 768, null);        
         g.drawImage(shelf, 84, 41, 175, 234, null);
         g.drawImage(shelf, 239, 41, 175, 234, null);
         g.drawImage(plant, 652, 129, 79, 128, null);
         g.drawImage(chairR, 157, 382, 104, 164, null);
         g.drawImage(chairL, 371, 336, 95, 162, null);
         g.drawImage(chairL, 371, 438, 95, 162, null);
+
+        for(GameObject obj:clueRoomObjs){
+            obj.draw(g);
+        }
+        
         g.drawImage(magicBall, 251, 419, 84, 79, null);
         g.drawImage(flowers, 293, 459, 73, 104, null);
         g.drawImage(plant, 44, 600, 79, 128, null);
