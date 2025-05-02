@@ -24,7 +24,6 @@ public class GameStarter {
             System.out.println("CONNECTION SUCCESSFUL!");
             dataIn = new DataInputStream(pSocket.getInputStream());
             dataOut = new DataOutputStream(pSocket.getOutputStream());
-            // gameStart = new GameFrame();
         } catch(IOException e){
             System.out.println("IOException from ConnectToServer() method.");
         }
@@ -36,6 +35,7 @@ public class GameStarter {
 			System.out.println(dataIn.readUTF()+" ");
 			String playerNumber = dataIn.readUTF();
 			gameStart = new GameFrame(playerNumber);
+            dataOut.writeInt(gameStart.updateGameLevel());
         }catch(IOException e){
             System.out.println("IOException from chat() method.");
         }

@@ -61,4 +61,14 @@ public class ClueRoom implements Room{
     public ArrayList<GameObject> getClueRoomObjs(){
         return clueRoomObjs;
     }
+
+    // public boolean clueIsFound(int level){
+    //     switch (level) {
+    //         case 1:
+                
+    //             break;
+    //         default:
+    //             throw new AssertionError();
+    //     }
+    // }
 }

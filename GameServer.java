@@ -42,10 +42,14 @@ public class GameServer {
 		private Socket p1Socket, p2Socket;
 		private DataInputStream dataIn1, dataIn2;
 		private DataOutputStream dataOut1, dataOut2;
+        private boolean gameWin;
+        public int gameLevel;
 
 		public GameSession (Socket p1, Socket p2){
 			p1Socket = p1;
 			p2Socket = p2;
+            gameWin = false;
+        
 			try{
 				dataIn1 = new DataInputStream(p1Socket.getInputStream());
 				dataOut1 = new DataOutputStream(p1Socket.getOutputStream());
@@ -68,10 +72,29 @@ public class GameServer {
 				dataOut1.writeUTF("Player 1");
 				dataOut2.writeUTF("Player 2");
 				System.out.println("2 players are in this game session.");
+                //kinda need this to go on forever i cant rlly process rn how
+                if(dataIn1.readInt()>dataIn2.readInt()){
+                    gameLevel = dataIn1.readInt();
+                }
+                else if(dataIn2.readInt()>dataIn1.readInt()){
+                    gameLevel = dataIn2.readInt();
+                }
+                else{
+                    gameLevel = dataIn1.readInt();
+                }
+                //
 			} catch(IOException ex){
 				System.out.println("IOException from ClientRunnable's run() method.");
 			}
 		}
+
+        public boolean gameIsWon(){
+        if(gameLevel>3){
+            gameWin = true;
+        }
+        return gameWin;
+    }
+
     }
 
     public void closeSocketsOnShutdown(){

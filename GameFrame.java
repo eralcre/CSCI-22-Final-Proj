@@ -19,4 +19,8 @@ public class GameFrame{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
     }
+
+	public int updateGameLevel(){
+		return gc.getLevel();
+	}
 }
