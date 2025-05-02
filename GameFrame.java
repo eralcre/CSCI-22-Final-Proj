@@ -1,15 +1,17 @@
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
-public class GameFrame extends JFrame{
+public class GameFrame{
     private GameCanvas gc;
 	private JFrame frame;
+	private String playerNumber;
 
-    public GameFrame() {
+    public GameFrame(String playerNumber) {
+		this.playerNumber = playerNumber;
 		int w = 1024;
 		int h = 768;
-		JFrame frame = new JFrame();
-		GameCanvas gc = new GameCanvas(w, h);
+		frame = new JFrame();
+		gc = new GameCanvas(w, h, playerNumber);
 		gc.setPreferredSize(new Dimension(w, h));
 		frame.setTitle("blablablablablblababoom");
 		frame.add(gc);
@@ -17,4 +19,8 @@ public class GameFrame extends JFrame{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
     }
+
+	public int updateGameLevel(){
+		return gc.getLevel();
+	}
 }

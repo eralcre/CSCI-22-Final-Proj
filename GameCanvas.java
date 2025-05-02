@@ -1,16 +1,32 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
 
-public class GameCanvas extends JPanel {
+public class GameCanvas extends JComponent {
 	private int width, height;
+	private String playerNumber;
     private Player player;
-
-    public GameCanvas(int w, int h) {
+    private Room room;
+    private Status gameStat;
+	
+    public GameCanvas(int w, int h, String playerNumber) {
+		this.playerNumber = playerNumber;
 		width = w;
 		height = h;
+
+        if (playerNumber.equals("Player 1")){
+            player = new Player1(200, 200, 100, 100);
+            room = new ClueRoom();
+            //call method here that will set listeners for when they click the objects
+            gameStat = new Status(playerNumber);
+        } else if (playerNumber.equals("Player 2")) {
+            player = new Player2(200, 200, 100, 100);
+            //add bg image for this player here that should be conditioned depending on the level
+            //call method that will set listeneners depending on the level puzzle
+            gameStat = new Status(playerNumber);
+        }
+
         setFocusable(true);
-        player = new Player(200, 200, 40, 40, Color.GREEN);
         setupKeyBindings();
     }
 
@@ -32,7 +48,8 @@ public class GameCanvas extends JPanel {
     public class UpAction extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            player.move(player.getX(), player.getY() - 10);
+            player.moveU();
+            player.appearance("B");
 			repaint();
         }
     }
@@ -40,7 +57,8 @@ public class GameCanvas extends JPanel {
     public class DownAction extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            player.move(player.getX(), player.getY() + 10);
+            player.moveD();
+            player.appearance("F");
 			repaint();
         }
     }
@@ -48,7 +66,8 @@ public class GameCanvas extends JPanel {
     public class LeftAction extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            player.move(player.getX() - 10, player.getY());
+            player.moveL();
+            player.appearance("L");
 			repaint();
         }
     }
@@ -56,23 +75,27 @@ public class GameCanvas extends JPanel {
     public class RightAction extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
-            player.move(player.getX() + 10, player.getY());
+            player.moveR();
+            player.appearance("R");
 			repaint();
         }
     }
 
+    public int getLevel(){
+        return gameStat.getLevel();
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
-    Graphics2D g2d = (Graphics2D) g;
+		Graphics2D g2d = (Graphics2D) g;
 
-    g2d.setColor(Color.WHITE);
-    g2d.fillRect(0, 0, getWidth(), getHeight());
+		RenderingHints rh = new RenderingHints(
+			RenderingHints.KEY_ANTIALIASING,
+			RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setRenderingHints(rh);
 
-    RenderingHints rh = new RenderingHints(
-        RenderingHints.KEY_ANTIALIASING,
-        RenderingHints.VALUE_ANTIALIAS_ON);
-    g2d.setRenderingHints(rh);
-
-    player.draw(g2d);
+        room.draw(g2d);
+        player.draw(g2d);
+        gameStat.draw(g2d);
     }
 }
