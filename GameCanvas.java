@@ -8,26 +8,35 @@ public class GameCanvas extends JComponent {
     private Player player;
     private Room room;
     private Status gameStat;
+    private Hint hint;
+    private boolean hintIsClicked;
+    private int hintClickCount;
 	
     public GameCanvas(int w, int h, String playerNumber) {
 		this.playerNumber = playerNumber;
 		width = w;
 		height = h;
+        hintIsClicked = false;
+        hintClickCount = 0;
 
-        if (playerNumber.equals("Player 1")){
+        if (this.playerNumber.equals("Player 1")){
             player = new Player1(200, 200, 100, 100);
             room = new ClueRoom();
-            //call method here that will set listeners for when they click the objects
             gameStat = new Status(playerNumber);
-        } else if (playerNumber.equals("Player 2")) {
+            hint = new Hint();
+            //call method here that will set listeners for when they click the objects
+            
+        } else if (this.playerNumber.equals("Player 2")) {
             player = new Player2(200, 200, 100, 100);
             //add bg image for this player here that should be conditioned depending on the level
             //call method that will set listeneners depending on the level puzzle
             gameStat = new Status(playerNumber);
+            hint = new Hint();
         }
 
         setFocusable(true);
         setupKeyBindings();
+        setUpHintMouseClicked();
     }
 
     private void setupKeyBindings() {
@@ -81,6 +90,25 @@ public class GameCanvas extends JComponent {
         }
     }
 
+    private void setUpHintMouseClicked(){
+        MouseAdapter ma = new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                Point p = e.getPoint();
+                if(hint.hintIconArea().contains(p)){
+                    hintClickCount++;
+                    if (hintClickCount%2!=0){
+                        hintIsClicked = true;
+                    }
+                    else {
+                        hintIsClicked = false;
+                    }
+                    repaint();
+                }
+            }
+        };
+        this.addMouseListener(ma);
+    }
+
     public int getLevel(){
         return gameStat.getLevel();
     }
@@ -97,5 +125,9 @@ public class GameCanvas extends JComponent {
         room.draw(g2d);
         player.draw(g2d);
         gameStat.draw(g2d);
+        hint.drawHintIcon(g2d);
+        if(hintIsClicked){
+            hint.drawHintBox(g2d, getLevel(), playerNumber);
+        }
     }
 }

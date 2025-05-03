@@ -19,7 +19,7 @@ public class GameStarter {
             String ipAdress = playerInput.nextLine();
             System.out.print("Please input the port number: ");
             int portNum = Integer.parseInt(playerInput.nextLine());
-            System.out.println("ATTEMPTING TO CONNECTE TO SERVER...");
+            System.out.println("ATTEMPTING TO CONNECT TO SERVER...");
             pSocket = new Socket(ipAdress, portNum);
             System.out.println("CONNECTION SUCCESSFUL!");
             dataIn = new DataInputStream(pSocket.getInputStream());
