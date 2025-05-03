@@ -18,9 +18,9 @@ public class Status{
         try {
             textFont = Font.createFont(Font.TRUETYPE_FONT, new File("Font/PixelifySans-Bold.ttf"));
         } catch (IOException ex) {
-            System.out.println("IOException from Font.");
+            System.out.println("IOException from Status Font.");
         } catch (FontFormatException ex) {
-            System.out.println("FontFormatException from Font.");
+            System.out.println("FontFormatException from Status Font.");
         }
 
         bgColor = new Color(0,0,0,191);
