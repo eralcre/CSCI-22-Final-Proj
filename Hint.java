@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class Hint{
     private Font textFont;
-    private Color bgColor, hintColor, textColor, borderColor;
+    private Color bgColor, hintColor, borderColor;
     private Image hint;
     private Rectangle2D.Double hintIcon;
 
