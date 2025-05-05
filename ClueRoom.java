@@ -4,8 +4,10 @@ import javax.swing.*;
 
 public class ClueRoom implements Room{
     private ArrayList<GameObject> clueRoomObjs;
+    private ArrayList<Rectangle> objectBounds, clueObjBounds;
     private Image bg, bookshelf, shelf, chairL, chairR, dresser, flowers, magicBall, plant, table, potions;
     private GameObject bookshelfObj, tableObj, potionsObj, dresserObj;
+    private Rectangle bookshelfBounds, tableBounds, potionsBounds, dresserBounds;
 
     public ClueRoom(){
         clueRoomObjs = new ArrayList<>();
@@ -14,14 +16,20 @@ public class ClueRoom implements Room{
         shelf = new ImageIcon("ClueRoom/shelf.png").getImage();
         chairL = new ImageIcon("ClueRoom/ChairL.png").getImage();
         chairR = new ImageIcon("ClueRoom/ChairR.png").getImage();
-        dresser = new ImageIcon("ClueRoom/Dreser.png").getImage();
+        dresser = new ImageIcon("ClueRoom/Dresser.png").getImage();
         flowers = new ImageIcon("ClueRoom/Flowers.png").getImage();
         magicBall = new ImageIcon("ClueRoom/MagicBall.png").getImage();
         plant = new ImageIcon("ClueRoom/Plant.png").getImage();
         table = new ImageIcon("ClueRoom/Table.png").getImage();
         potions = new ImageIcon("ClueRoom/Potions.png").getImage();
 
+        bookshelfBounds = new Rectangle(419,208,207,60);
+        tableBounds = new Rectangle(261,363,101,251);
+        potionsBounds = new Rectangle(579,571,211,157);
+        dresserBounds = new Rectangle(922,262,70,309);
+
         createObjs();
+        createObjectBounds();
     }
 
     @Override
@@ -62,13 +70,39 @@ public class ClueRoom implements Room{
         return clueRoomObjs;
     }
 
-    // public boolean clueIsFound(int level){
-    //     switch (level) {
-    //         case 1:
-                
-    //             break;
-    //         default:
-    //             throw new AssertionError();
-    //     }
-    // }
+    @Override
+    public void createObjectBounds(){
+        objectBounds = new ArrayList<>();
+        objectBounds.add(new Rectangle(0,0,1024,208));
+        objectBounds.add(new Rectangle(0,208,32,560));
+        objectBounds.add(new Rectangle(0,600,113,168));
+        objectBounds.add(new Rectangle(165,728,879,40));
+        objectBounds.add(new Rectangle(102,208,293,54));
+        objectBounds.add(new Rectangle(662,208,64,48));
+        objectBounds.add(new Rectangle(165,395,86,143));
+        objectBounds.add(new Rectangle(371,345,86,233));
+        objectBounds.add(new Rectangle(907,571,85,157));
+        objectBounds.add(new Rectangle(992,208,32,560));
+
+        objectBounds.add(bookshelfBounds);
+        objectBounds.add(tableBounds);
+        objectBounds.add(potionsBounds);
+        objectBounds.add(dresserBounds);
+
+        clueObjBounds = new ArrayList<>();
+        clueObjBounds.add(bookshelfBounds);
+        clueObjBounds.add(tableBounds);
+        clueObjBounds.add(potionsBounds);
+        clueObjBounds.add(dresserBounds);
+    }
+
+    @Override
+    public ArrayList<Rectangle> getObjectBounds(){
+        return objectBounds;
+    }
+
+    @Override
+    public ArrayList<Rectangle> getOthrObjBounds(){
+        return clueObjBounds;
+    }
 }
