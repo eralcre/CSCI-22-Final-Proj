@@ -65,26 +65,33 @@ public class GameServer {
 			t.start();
 		}
 
-		public void run(){
-			try{
+		public void run() {
+			try {
 				dataOut1.writeUTF("HELLO! WELCOME TO [GAME NAME]! You are Player 1");
 				dataOut2.writeUTF("HELLO! WELCOME TO [GAME NAME]! You are Player 2");
 				dataOut1.writeUTF("Player 1");
 				dataOut2.writeUTF("Player 2");
 				System.out.println("2 players are in this game session.");
-                //kinda need this to go on forever i cant rlly process rn how
-                if(dataIn1.readInt()>dataIn2.readInt()){
-                    gameLevel = dataIn1.readInt();
-                }
-                else if(dataIn2.readInt()>dataIn1.readInt()){
-                    gameLevel = dataIn2.readInt();
-                }
-                else{
-                    gameLevel = dataIn1.readInt();
-                }
-                //
-			} catch(IOException ex){
-				System.out.println("IOException from ClientRunnable's run() method.");
+
+				int level1 = dataIn1.readInt();
+				int level2 = dataIn2.readInt();
+
+				while (true) {
+					level1 = dataIn1.readInt();
+					level2 = dataIn2.readInt();
+
+					if (level1 > level2) {
+						dataOut2.writeInt(level1);
+					} else if (level2 > level1) {
+						dataOut1.writeInt(level2);
+					} else {
+						dataOut1.writeInt(level1);
+						dataOut2.writeInt(level2);
+					}
+				}
+
+			} catch (IOException ex) {
+				System.out.println("IOException from GameSession run() method.");
 			}
 		}
 

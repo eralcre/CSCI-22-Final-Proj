@@ -40,6 +40,21 @@ public class GameStarter {
             System.out.println("IOException from chat() method.");
         }
     }
+	
+	public void syncLevels() {
+		new Thread(() -> {
+			try {
+				while (true) {
+					dataOut.writeInt(gameStart.updateGameLevel());
+					int syncedLevel = dataIn.readInt();
+					gameStart.setLevel(syncedLevel);
+					Thread.sleep(100);
+				}
+			} catch (Exception e) {
+				System.out.println("Exception from syncLevels(): " + e.getMessage());
+			}
+		}).start();
+	}
 
     public void closeSocketOnShutdown(){
         Runtime.getRuntime().addShutdownHook(new Thread(()->{
@@ -56,5 +71,6 @@ public class GameStarter {
         cc.closeSocketOnShutdown();
         cc.ConnectToGameServer();
 	    cc.waitForOtherPlayer();
+		cc.syncLevels();
     }
 }

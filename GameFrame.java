@@ -23,4 +23,8 @@ public class GameFrame{
 	public int updateGameLevel(){
 		return gc.getLevel();
 	}
-}
+	
+	public void setLevel(int level) {
+		gc.setLevel(level);
+	}
+} 

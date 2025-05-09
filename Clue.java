@@ -6,7 +6,7 @@ import javax.swing.*;
 public class Clue{
     private Color borderColor,clueColor,bgColor;
     private Font textFont;
-    private Rectangle2D.Double clueIcon;
+    private Rectangle2D.Double clueIcon, xBox;
     private int x, y;
     private Image clue;
 
@@ -45,7 +45,7 @@ public class Clue{
     }
 
     public void drawClueBox(Graphics2D g2d, int clueObjIndex){
-        Rectangle2D.Double clueBox = new Rectangle2D.Double(250,250,525,235);
+        Rectangle2D.Double clueBox = new Rectangle2D.Double(112,188,800,450);
         g2d.setColor(bgColor);
         g2d.fill(clueBox);
         g2d.setColor(borderColor);
@@ -73,5 +73,24 @@ public class Clue{
         }
 
         g2d.drawImage(clue, 303, 324, 420, 120, null);
+    }
+
+    public void drawX(Graphics2D g2d){
+        Line2D.Double lStroke = new Line2D.Double(869.06, 214.94, 885.06, 230.94);
+        Line2D.Double rStroke = new Line2D.Double(884.94, 214.94, 869.06, 230.94);
+        g2d.setColor(bgColor);
+        xBox = new Rectangle2D.Double(862,208,30,30);
+        g2d.fill(xBox);
+        
+        g2d.setColor(Color.RED);
+        g2d.setStroke(new BasicStroke(3));
+        g2d.draw(lStroke);
+        g2d.draw(rStroke);
+
+        
+    }
+
+    public Rectangle2D.Double xBoxArea(){
+        return xBox;
     }
 }

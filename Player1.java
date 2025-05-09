@@ -37,6 +37,12 @@ public class Player1 extends Player {
     public Image characterImage(){
         return character;
     }
+	
+	@Override
+	public void setPosition(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
 
     @Override
     public int getX() {return x;}

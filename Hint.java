@@ -54,13 +54,13 @@ public class Hint{
         g2d.setColor(Color.RED);
         g2d.drawString("hint!", 470, 290);
 
-        if (player.equals("Player 1")){
+        if (player.equals("Player 2")){
             switch (level) {//change the files to actual hint images per level later on
                 case 1:
-                    hint = new ImageIcon("Hints/sampleHint.png").getImage();//hint1 clueroom img
+                    hint = new ImageIcon("Hints/Hint.png").getImage();//hint1 clueroom img
                     break;
                 case 2:
-                    hint = new ImageIcon("Hints/sampleHint.png").getImage();//hint 2 puzzle img
+                    hint = new ImageIcon("Hints/Hint.png").getImage();//hint 2 puzzle img
                     break;
                 case 3:
                     hint = new ImageIcon("Hints/sampleHint.png").getImage();//battle instructions img
@@ -69,13 +69,13 @@ public class Hint{
                     break;
             }
         }
-        else if (player.equals("Player 2")){
+        else if (player.equals("Player 1")){
             switch (level) {//change the files to actual hint images per level later on
                 case 1:
-                    hint = new ImageIcon("Hints/sampleHint.png").getImage();//hint1 puzzle img
+                    hint = new ImageIcon("Hints/Hint1.png").getImage();//hint1 puzzle img
                     break;
                 case 2:
-                    hint = new ImageIcon("Hints/sampleHint.png").getImage();//hint 2 clue room img
+                    hint = new ImageIcon("Hints/Hint2.png").getImage();//hint 2 clue room img
                     break;
                 case 3:
                     hint = new ImageIcon("Hints/sampleHint.png").getImage();//battle instructions img
