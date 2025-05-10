@@ -7,6 +7,8 @@ public class GameServer {
     private ArrayList<Socket> sockets;
     private int playerCount = 0;
     private Socket p1Socket, p2Socket;
+	private boolean p1Ready = false;
+	private boolean p2Ready = false;
 
     public GameServer(){
         sockets = new ArrayList<>();
@@ -44,6 +46,7 @@ public class GameServer {
 		private DataOutputStream dataOut1, dataOut2;
         private boolean gameWin;
         public int gameLevel;
+		private boolean gameStarted = false;
 
 		public GameSession (Socket p1, Socket p2){
 			p1Socket = p1;
@@ -65,26 +68,54 @@ public class GameServer {
 			t.start();
 		}
 
-		public void run(){
-			try{
+		public void run() {
+			try {
 				dataOut1.writeUTF("HELLO! WELCOME TO [GAME NAME]! You are Player 1");
 				dataOut2.writeUTF("HELLO! WELCOME TO [GAME NAME]! You are Player 2");
 				dataOut1.writeUTF("Player 1");
 				dataOut2.writeUTF("Player 2");
 				System.out.println("2 players are in this game session.");
-                //kinda need this to go on forever i cant rlly process rn how
-                if(dataIn1.readInt()>dataIn2.readInt()){
-                    gameLevel = dataIn1.readInt();
-                }
-                else if(dataIn2.readInt()>dataIn1.readInt()){
-                    gameLevel = dataIn2.readInt();
-                }
-                else{
-                    gameLevel = dataIn1.readInt();
-                }
-                //
-			} catch(IOException ex){
-				System.out.println("IOException from ClientRunnable's run() method.");
+
+				while (!p1Ready || !p2Ready) {
+					if (!p1Ready) {
+						String msg = dataIn1.readUTF();
+						if (msg.equals("PLAYER_READY")) {
+							p1Ready = true;
+						}
+					}
+
+					if (!p2Ready) {
+						String msg = dataIn2.readUTF();
+						if (msg.equals("PLAYER_READY")) {
+							p2Ready = true;
+						}
+					}
+				}
+
+				dataOut1.writeUTF("START_GAME");
+				dataOut2.writeUTF("START_GAME");
+				dataOut1.flush();
+				dataOut2.flush();
+
+				int level1 = dataIn1.readInt();
+				int level2 = dataIn2.readInt();
+
+				while (true) {
+					level1 = dataIn1.readInt();
+					level2 = dataIn2.readInt();
+
+					if (level1 > level2) {
+						dataOut2.writeInt(level1);
+					} else if (level2 > level1) {
+						dataOut1.writeInt(level2);
+					} else {
+						dataOut1.writeInt(level1);
+						dataOut2.writeInt(level2);
+					}
+				}
+
+			} catch (IOException ex) {
+				System.out.println("IOException from GameSession run() method.");
 			}
 		}
 
@@ -93,7 +124,7 @@ public class GameServer {
             gameWin = true;
         }
         return gameWin;
-    }
+		}
 
     }
 

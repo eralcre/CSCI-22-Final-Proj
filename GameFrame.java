@@ -23,4 +23,16 @@ public class GameFrame{
 	public int updateGameLevel(){
 		return gc.getLevel();
 	}
+
+	public void setLevel(int level) {
+		gc.setLevel(level);
+	}
+	
+	public boolean isPlayerReady() {
+		return gc.isPlayerReady();
+	}
+
+	public void startGameFromServer() {
+		gc.startGame();
+	}
 }
