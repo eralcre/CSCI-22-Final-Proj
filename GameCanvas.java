@@ -3,41 +3,38 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class GameCanvas extends JComponent {
-    private int width, height;
     private String playerNumber;
     private Player player;
     private Start startScreen;
+    private GameOver GOScreen;
     private Room room;
     private Status gameStat;
     private Hint hint;
-    private boolean levelFailed;
-    private boolean gameStarted, hintIsClicked, clueFound, clueIsClicked, timerIsRunning;
+    private boolean gameOver;
+    private boolean gameStarted, hintIsClicked, clueFound, clueIsClicked;
     private int hintClickCount;
     private Rectangle nextPlayerBounds, doorBounds;
     private Clue clue;
     private int clueBoundsIndex;
     private Timer levelTimer;
-	private boolean playerIsReady = false;
-	private boolean startButtonClicked = false;
+	private boolean playerIsReady;
+	private boolean startButtonClicked;
 
-    public GameCanvas(int w, int h, String playerNumber) {
+    public GameCanvas(String playerNumber) {
         this.playerNumber = playerNumber;
-        width = w;
-        height = h;
-        gameStarted = false;
-        timerIsRunning = false;
-        levelFailed = false;
+        
         hintIsClicked = false;
         hintClickCount = 0;
         clueFound = false;
         clueIsClicked = false;
         startScreen = new Start();
+        GOScreen = new GameOver();
         gameStart();
 
         setFocusable(true);
         setupKeyBindings();
-        setUpTimers();
         setUpStartMouseClicked();
+        setUpGameOverMouseClicked();
         setUpHintMouseClicked();
         setUpClueMouseClicked();
 		setUpPatternMouseClicked();
@@ -57,32 +54,45 @@ public class GameCanvas extends JComponent {
             hint = new Hint();
             clue = new Clue();
         }
+        gameStarted = false;
+        gameOver = false;
+        playerIsReady = false;
+        startButtonClicked = false;
+        setUpTimers();
     }
 
 	private void checkForLevelCompletion() {
 		Rectangle playerBounds = new Rectangle(player.getX(), player.getY(), player.getWidth(), player.getHeight());
 		doorBounds = new Rectangle(461, 46, 104, 146);
 
-		if (playerBounds.intersects(doorBounds)) {
-			gameStat.nextLevel();
-			int newLevel = gameStat.getLevel();
-			switch (newLevel) {
-				case 2:
-					if (this.playerNumber.equals("Player 1")) {
-						room = new ClueRoom();
-					} else if (this.playerNumber.equals("Player 2")) {
-						room = new MatchingRoom();
-						player.setPosition(472, 639);
-					}
-					break;
-				case 3:
-					break;
-				default:
-					break;
-			}
+        if (playerNumber.equals("Player 1")){
+            int nextLevel = 3;
+            if (nextLevel==gameStat.getLevel()){
+                gameStat.setTimer(0, 2, 0, 0);
+                repaint();
+                nextLevel++;
+            }
+        }
 
-			repaint();
-		}
+        if (playerNumber.equals("Player 2")){
+            if (playerBounds.intersects(doorBounds)) {
+                gameStat.nextLevel();
+                int newLevel = gameStat.getLevel();
+                switch (newLevel) {
+                    case 2:
+                        room = new MatchingRoom();
+                        player.setPosition(472, 639);
+                        break;
+                    case 3:
+                        gameStat.setTimer(0, 2, 0, 0);
+                        break;
+                    default:
+                        break;
+                }
+
+                repaint();
+            }
+        }
 	}
 
     private void setupKeyBindings() {
@@ -233,7 +243,7 @@ public class GameCanvas extends JComponent {
 
 		for (Shape obj : room.getOthrObjBounds()) {
 			if (obj.intersects(nextPlayerBounds)) {
-				clueBoundsIndex = room.getObjectBounds().indexOf(obj);
+				clueBoundsIndex = room.getOthrObjBounds().indexOf(obj);
 				return true;
 			}
 		}
@@ -246,8 +256,7 @@ public class GameCanvas extends JComponent {
                 gameStat.timerCountdown();
                 if (gameStat.timeIsOver()){
                     levelTimer.stop();
-                    levelFailed = true;
-                    gameStart();
+                    gameOver = true;
                 }
                 repaint();
             }
@@ -258,7 +267,6 @@ public class GameCanvas extends JComponent {
 
     public void startGame(){
         gameStarted = true;
-        timerIsRunning = true;
         levelTimer.start();
         repaint();
     }
@@ -283,6 +291,20 @@ public class GameCanvas extends JComponent {
 		};
 		this.addMouseListener(ma);
 	}
+
+    private void setUpGameOverMouseClicked(){
+        MouseAdapter ma = new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Point p = e.getPoint();
+				if ((GOScreen.restartButtonArea()!=null) && (GOScreen.restartButtonArea().contains(p))) {
+                    gameStart();
+					repaint();
+				}
+			}
+		};
+		this.addMouseListener(ma);
+    }
 
     private void setUpHintMouseClicked() {
         MouseAdapter ma = new MouseAdapter() {
@@ -350,6 +372,10 @@ public class GameCanvas extends JComponent {
 		gameStat.setLevel(level);
 	}
 
+    public boolean gameIsOver(){
+        return gameOver;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -363,9 +389,14 @@ public class GameCanvas extends JComponent {
         gameStat.draw(g2d);
         hint.drawHintIcon(g2d);
 
-        if(gameStarted==false){
+        if (gameStarted==false){
             startScreen.drawStartScreen(g2d);
             startScreen.drawStartButton(g2d, startButtonClicked);
+        }
+
+        if (gameOver){
+            GOScreen.drawGameOverScreen(g2d);
+            GOScreen.drawRestartButton(g2d);
         }
 
         if (hintIsClicked) {
