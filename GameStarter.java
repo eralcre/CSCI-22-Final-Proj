@@ -35,21 +35,68 @@ public class GameStarter {
 			System.out.println(dataIn.readUTF()+" ");
 			String playerNumber = dataIn.readUTF();
 			gameStart = new GameFrame(playerNumber);
-            dataOut.writeInt(gameStart.updateGameLevel());
         }catch(IOException e){
             System.out.println("IOException from chat() method.");
         }
     }
+
+	public void notifyPlayerReady() {
+		try {
+			if (gameStart.isPlayerReady()) {
+				dataOut.writeUTF("PLAYER_READY");
+				dataOut.flush();
+
+				String response = dataIn.readUTF();
+				if (response.equals("START_GAME")) {
+					gameStart.startGameFromServer();
+					dataOut.writeInt(gameStart.updateGameLevel());
+					syncLevels();
+				}
+			}
+		} catch (IOException e) {
+			System.err.println("Notification error: " + e.getMessage());
+		}
+	}
 	
-	public void syncLevels() {
+	public void waitForPlayerReady() {
 		new Thread(() -> {
 			try {
+				while (true) {
+					if (gameStart.isPlayerReady()) {
+						notifyPlayerReady();
+						break;
+					}
+					Thread.sleep(100);
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}).start();
+	}
+
+	public void syncLevels() {
+		new Thread(() -> {
+			try {	
 				while (true) {
 					dataOut.writeInt(gameStart.updateGameLevel());
 					int syncedLevel = dataIn.readInt();
 					gameStart.setLevel(syncedLevel);
+
+					// if (gameStart.gameOver()){
+					// 	dataOut.writeUTF("game over");
+					// 	break;
+					// }
+					// else {
+					// 	dataOut.writeUTF("continue");
+					// }
+
 					Thread.sleep(100);
 				}
+
+				// if (dataIn.readUTF().equals("START_GAME")){
+				// 	gameStart.startGameFromServer();
+				// 	syncLevels();
+				// }
 			} catch (Exception e) {
 				System.out.println("Exception from syncLevels(): " + e.getMessage());
 			}
@@ -63,7 +110,7 @@ public class GameStarter {
             }catch(IOException e){
                 System.out.println("IOException from closeSocketOnShutdown() method.");
             }
-        }));    
+        }));
     }
 
     public static void main(String[] args) {
@@ -71,6 +118,6 @@ public class GameStarter {
         cc.closeSocketOnShutdown();
         cc.ConnectToGameServer();
 	    cc.waitForOtherPlayer();
-		cc.syncLevels();
+		cc.waitForPlayerReady();
     }
 }

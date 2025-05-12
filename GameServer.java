@@ -44,6 +44,9 @@ public class GameServer {
 		private DataOutputStream dataOut1, dataOut2;
         private boolean gameWin;
         public int gameLevel;
+		private boolean gameStarted = false;
+		private boolean p1Ready = false;
+		private boolean p2Ready = false;
 
 		public GameSession (Socket p1, Socket p2){
 			p1Socket = p1;
@@ -65,6 +68,10 @@ public class GameServer {
 			t.start();
 		}
 
+		public void startGame(){
+			
+		}
+
 		public void run() {
 			try {
 				dataOut1.writeUTF("HELLO! WELCOME TO [GAME NAME]! You are Player 1");
@@ -72,6 +79,27 @@ public class GameServer {
 				dataOut1.writeUTF("Player 1");
 				dataOut2.writeUTF("Player 2");
 				System.out.println("2 players are in this game session.");
+
+				while (!p1Ready || !p2Ready) {
+					if (!p1Ready) {
+						String msg = dataIn1.readUTF();
+						if (msg.equals("PLAYER_READY")) {
+							p1Ready = true;
+						}
+					}
+
+					if (!p2Ready) {
+						String msg = dataIn2.readUTF();
+						if (msg.equals("PLAYER_READY")) {
+							p2Ready = true;
+						}
+					}
+				}
+
+				dataOut1.writeUTF("START_GAME");
+				dataOut2.writeUTF("START_GAME");
+				dataOut1.flush();
+				dataOut2.flush();
 
 				int level1 = dataIn1.readInt();
 				int level2 = dataIn2.readInt();
@@ -88,6 +116,32 @@ public class GameServer {
 						dataOut1.writeInt(level1);
 						dataOut2.writeInt(level2);
 					}
+
+					if (dataIn1.readUTF().equals("game over")&&dataIn2.readUTF().equals("game over")){
+						p1Ready = false;
+						p2Ready = false;
+
+						// while (!p1Ready || !p2Ready) {
+						// 	if (!p1Ready) {
+						// 		String msg = dataIn1.readUTF();
+						// 		if (msg.equals("PLAYER_READY")) {
+						// 			p1Ready = true;
+						// 		}
+						// 	}
+
+						// 	if (!p2Ready) {
+						// 		String msg = dataIn2.readUTF();
+						// 		if (msg.equals("PLAYER_READY")) {
+						// 			p2Ready = true;
+						// 		}
+						// 	}
+						// }
+
+						// dataOut1.writeUTF("START_GAME");
+						// dataOut2.writeUTF("START_GAME");
+						// dataOut1.flush();
+						// dataOut2.flush();
+					}
 				}
 
 			} catch (IOException ex) {
@@ -100,7 +154,7 @@ public class GameServer {
             gameWin = true;
         }
         return gameWin;
-    }
+		}
 
     }
 

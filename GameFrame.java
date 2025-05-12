@@ -11,7 +11,7 @@ public class GameFrame{
 		int w = 1024;
 		int h = 768;
 		frame = new JFrame();
-		gc = new GameCanvas(w, h, playerNumber);
+		gc = new GameCanvas(playerNumber);
 		gc.setPreferredSize(new Dimension(w, h));
 		frame.setTitle("blablablablablblababoom");
 		frame.add(gc);
@@ -23,8 +23,20 @@ public class GameFrame{
 	public int updateGameLevel(){
 		return gc.getLevel();
 	}
-	
-	public void setLevel(int level) {
+
+	public void setLevel(int level){
 		gc.setLevel(level);
 	}
-} 
+	
+	public boolean isPlayerReady(){
+		return gc.isPlayerReady();
+	}
+
+	public void startGameFromServer(){
+		gc.startGame();
+	}
+
+	public boolean gameOver(){
+		return gc.gameIsOver();
+	}
+}

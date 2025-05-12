@@ -36,7 +36,7 @@ public class Status{
 
         level = 1;
         mins1 = 0;
-        mins2 = 5;
+        mins2 = 2;
         secs1 = 0;
         secs2 = 0;
         timer = mins1+mins2+":"+secs1+secs2;
