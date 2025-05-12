@@ -31,15 +31,21 @@ public class Start{
         g2d.drawImage(title, 76, 87, 871, 308, null);
     }
 
-    public void drawStartButton(Graphics2D g2d){
-        startButton = new Rectangle2D.Double(390, 420, 244, 98);
-        g2d.setColor(Color.BLACK);
-        g2d.fill(startButton);
+    public void drawStartButton(Graphics2D g2d, boolean clicked){
+		startButton = new Rectangle2D.Double(390, 420, 244, 98);
+		g2d.setColor(Color.BLACK);
+		g2d.fill(startButton);
 
-        textFont = textFont.deriveFont(36f);
-        g2d.setFont(textFont);
-        g2d.setColor(Color.RED);
-        g2d.drawString("Start", 453, 477);
+		textFont = textFont.deriveFont(36f);
+		g2d.setFont(textFont);
+		g2d.setColor(Color.RED);
+
+		if (clicked) {
+            g2d.setColor(Color.GREEN);
+			g2d.drawString("Waiting", 435, 477);
+		} else {
+			g2d.drawString("Start", 453, 477);
+		}
     }
 
     public Rectangle2D.Double startButtonArea(){
