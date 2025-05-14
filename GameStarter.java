@@ -35,11 +35,80 @@ public class GameStarter {
 			System.out.println(dataIn.readUTF()+" ");
 			String playerNumber = dataIn.readUTF();
 			gameStart = new GameFrame(playerNumber);
-            dataOut.writeInt(gameStart.updateGameLevel());
         }catch(IOException e){
             System.out.println("IOException from chat() method.");
         }
     }
+
+	public void notifyPlayerReady() {
+		try {
+			if (gameStart.isPlayerReady()) {
+				dataOut.writeUTF("PLAYER_READY");
+				dataOut.flush();
+
+				String response = dataIn.readUTF();
+				if (response.equals("START_GAME")) {
+					gameStart.startGameFromServer();
+					dataOut.writeInt(gameStart.updateGameLevel());
+					startSync();
+				}
+			}
+		} catch (IOException e) {
+			System.out.println("IOException from notifyPlayerReady() method.");
+		}
+	}
+	
+	public void waitForPlayerReady() {
+		new Thread(() -> {
+			try {
+				while (true) {
+					if (gameStart.isPlayerReady()) {
+						notifyPlayerReady();
+						break;
+					}
+					Thread.sleep(100);
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}).start();
+	}
+
+	public void startSync() {
+		new Thread(() -> {
+			try {
+				int syncedLevel = 0;
+				
+				while (true) {
+					if (syncedLevel < 3) {
+						int currentLevel = gameStart.updateGameLevel();
+						dataOut.writeInt(currentLevel);
+						syncedLevel = dataIn.readInt();
+						gameStart.setLevel(syncedLevel);
+					}
+
+					if (syncedLevel == 3) {
+						dataOut.writeUTF("POSITION");
+						dataOut.writeInt(gameStart.getPlayerX());
+						dataOut.writeInt(gameStart.getPlayerY());
+
+						if (dataIn.available() > 0) {
+							String msg = dataIn.readUTF();
+							if (msg.equals("POSITION")) {
+								int x = dataIn.readInt();
+								int y = dataIn.readInt();
+								gameStart.updateOtherPlayerPosition(x, y);
+							}
+						}
+					}
+
+					Thread.sleep(100);
+				}
+			} catch (Exception e) {
+				System.out.println("Sync error: " + e.getMessage());
+			}
+		}).start();
+	}
 
     public void closeSocketOnShutdown(){
         Runtime.getRuntime().addShutdownHook(new Thread(()->{
@@ -48,7 +117,7 @@ public class GameStarter {
             }catch(IOException e){
                 System.out.println("IOException from closeSocketOnShutdown() method.");
             }
-        }));    
+        }));
     }
 
     public static void main(String[] args) {
@@ -56,5 +125,6 @@ public class GameStarter {
         cc.closeSocketOnShutdown();
         cc.ConnectToGameServer();
 	    cc.waitForOtherPlayer();
+		cc.waitForPlayerReady();
     }
 }
