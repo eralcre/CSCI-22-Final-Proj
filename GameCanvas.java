@@ -19,15 +19,19 @@ public class GameCanvas extends JComponent {
     private Rectangle nextPlayerBounds, doorBounds;
     private Clue clue;
     private int clueBoundsIndex;
-    private Timer animationTimer, levelTimer;
+    private Timer animationTimer, levelTimer, attackTimer;
 	private boolean playerIsReady;
 	private boolean startButtonClicked;
+
 	private boolean bossDefeated = false;
 	private boolean upPressed = false;
 	private boolean downPressed = false;
 	private boolean leftPressed = false;
 	private boolean rightPressed = false;
 	private boolean pPressed = false;
+
+	private Attack playerAttack;
+	private boolean playerAttacked;
 
     public GameCanvas(String playerNumber) {
         this.playerNumber = playerNumber;
@@ -36,6 +40,7 @@ public class GameCanvas extends JComponent {
         hintClickCount = 0;
         clueFound = false;
         clueIsClicked = false;
+		playerAttacked = false;
         startScreen = new Start();
         GOScreen = new GameOver();
         gameStart();
@@ -342,7 +347,18 @@ public class GameCanvas extends JComponent {
         };
 
         levelTimer = new Timer(1000, levelTimerListener);
+
+		ActionListener attackTimerListener = new ActionListener() {
+			public void actionPerformed(ActionEvent ae){
+				playerAttack.moveAttack();
+				repaint();
+			}
+		};
+
+		attackTimer = new Timer(300, attackTimerListener);
     }
+
+
 
 	private void setUpStartMouseClicked(){
 		MouseAdapter ma = new MouseAdapter() {
@@ -491,11 +507,6 @@ public class GameCanvas extends JComponent {
             startScreen.drawStartButton(g2d, startButtonClicked);
         }
 
-        if (gameOver){
-            GOScreen.drawGameOverScreen(g2d);
-            GOScreen.drawRestartButton(g2d);
-        }
-
         if (hintIsClicked) {
             hint.drawHintBox(g2d, getLevel(), playerNumber);
         }
@@ -505,6 +516,15 @@ public class GameCanvas extends JComponent {
         if (clueIsClicked) {
             clue.drawClueBox(g2d, clueBoundsIndex);
             clue.drawX(g2d);
+        }
+
+		if (playerAttacked) {
+			playerAttack.drawAttack(g2d);
+		}
+		
+		if (gameOver){
+            GOScreen.drawGameOverScreen(g2d);
+            GOScreen.drawRestartButton(g2d);
         }
     }
 }
