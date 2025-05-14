@@ -44,6 +44,9 @@ public class GameServer {
 		private DataOutputStream dataOut1, dataOut2;
         private boolean gameWin;
         public int gameLevel;
+		private boolean gameStarted = false;
+		private boolean p1Ready = false;
+		private boolean p2Ready = false;
 
 		public GameSession (Socket p1, Socket p2){
 			p1Socket = p1;
@@ -65,37 +68,89 @@ public class GameServer {
 			t.start();
 		}
 
-		public void run(){
-			try{
+		public void run() {
+			try {
 				dataOut1.writeUTF("HELLO! WELCOME TO [GAME NAME]! You are Player 1");
 				dataOut2.writeUTF("HELLO! WELCOME TO [GAME NAME]! You are Player 2");
 				dataOut1.writeUTF("Player 1");
 				dataOut2.writeUTF("Player 2");
 				System.out.println("2 players are in this game session.");
-                //kinda need this to go on forever i cant rlly process rn how
-                if(dataIn1.readInt()>dataIn2.readInt()){
-                    gameLevel = dataIn1.readInt();
-                }
-                else if(dataIn2.readInt()>dataIn1.readInt()){
-                    gameLevel = dataIn2.readInt();
-                }
-                else{
-                    gameLevel = dataIn1.readInt();
-                }
-                //
-			} catch(IOException ex){
-				System.out.println("IOException from ClientRunnable's run() method.");
+
+				while (!p1Ready || !p2Ready) {
+					if (!p1Ready) {
+						String msg = dataIn1.readUTF();
+						if (msg.equals("PLAYER_READY")) {
+							p1Ready = true;
+						}
+					}
+
+					if (!p2Ready) {
+						String msg = dataIn2.readUTF();
+						if (msg.equals("PLAYER_READY")) {
+							p2Ready = true;
+						}
+					}
+				}
+
+				dataOut1.writeUTF("START_GAME");
+				dataOut2.writeUTF("START_GAME");
+				dataOut1.flush();
+				dataOut2.flush();
+
+				int level1 = dataIn1.readInt();
+				int level2 = dataIn2.readInt();
+
+				int syncedLevel = 0;
+
+				while (true) {
+					if (syncedLevel < 3) {
+						level1 = dataIn1.readInt();
+						level2 = dataIn2.readInt();
+						syncedLevel = Math.max(level1, level2);
+
+						dataOut1.writeInt(syncedLevel);
+						dataOut2.writeInt(syncedLevel);
+					}
+					
+					if (syncedLevel == 3) {
+						if (dataIn1.available() > 0) {
+							String msg = dataIn1.readUTF();
+							if (msg.equals("POSITION")) {
+								int x = dataIn1.readInt();
+								int y = dataIn1.readInt();
+								dataOut2.writeUTF("POSITION");
+								dataOut2.writeInt(x);
+								dataOut2.writeInt(y);
+							}
+						}
+
+						if (dataIn2.available() > 0) {
+							String msg = dataIn2.readUTF();
+							if (msg.equals("POSITION")) {
+								int x = dataIn2.readInt();
+								int y = dataIn2.readInt();
+								dataOut1.writeUTF("POSITION");
+								dataOut1.writeInt(x);
+								dataOut1.writeInt(y);
+							}
+						}
+					}
+
+					Thread.sleep(10);
+				}
+			} catch (Exception ex) {
+				System.out.println("Exception in GameSession run()");
 			}
 		}
 
-        public boolean gameIsWon(){
-        if(gameLevel>3){
-            gameWin = true;
-        }
-        return gameWin;
-    }
-
-    }
+		public boolean gameIsWon() {
+			if(gameLevel>3){
+				gameWin = true;
+			}
+			return gameWin;
+		}
+	
+	}
 
     public void closeSocketsOnShutdown(){
         Runtime.getRuntime().addShutdownHook(new Thread(()->{
