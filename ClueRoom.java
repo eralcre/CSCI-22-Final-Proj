@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class ClueRoom implements Room{
     private ArrayList<GameObject> clueRoomObjs;
-    private ArrayList<Rectangle> objectBounds, clueObjBounds;
+    private ArrayList<Shape> objectBounds, clueObjBounds;
     private Image bg, bookshelf, shelf, chairL, chairR, dresser, flowers, magicBall, plant, table, potions;
     private GameObject bookshelfObj, tableObj, potionsObj, dresserObj;
     private Rectangle bookshelfBounds, tableBounds, potionsBounds, dresserBounds;
@@ -97,12 +97,12 @@ public class ClueRoom implements Room{
     }
 
     @Override
-    public ArrayList<Rectangle> getObjectBounds(){
+    public ArrayList<Shape> getObjectBounds(){
         return objectBounds;
     }
 
     @Override
-    public ArrayList<Rectangle> getOthrObjBounds(){
+    public ArrayList<Shape> getOthrObjBounds(){
         return clueObjBounds;
     }
 }

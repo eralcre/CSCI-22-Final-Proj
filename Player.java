@@ -10,6 +10,7 @@ public abstract class Player {
         g.drawImage(characterImage(), getX(), getY(), getWidth(), getHeight(), null);
     }
 
+	public abstract void setPosition(int x, int y);
     public abstract void moveU();
     public abstract void moveD();
     public abstract void moveL();

@@ -7,9 +7,9 @@ public class Status{
     private Font textFont;
     private Color bgColor, textColor, borderColor;
 
-    private int playerNum, level;
-    private boolean lvlWin, clueFound;
-    private String clueStat;
+    private int playerNum, level, mins1, mins2, secs1, secs2;
+    private String timer;
+    private boolean timeOver;
 
     public Status(String player) {
         sWidth = 260;
@@ -35,9 +35,12 @@ public class Status{
         }
 
         level = 1;
-        lvlWin = false;
-        clueFound = false;
-        clueStat = "not found";
+        mins1 = 0;
+        mins2 = 2;
+        secs1 = 0;
+        secs2 = 0;
+        timer = mins1+mins2+":"+secs1+secs2;
+        timeOver = false;
     }
 
     public void draw(Graphics2D g2d){
@@ -56,16 +59,11 @@ public class Status{
         textFont = textFont.deriveFont(24f);
         g2d.setFont(textFont);
         g2d.drawString("level:", 33, 105);
-        g2d.drawString("clue:", 33, 127);
+        g2d.drawString("timer:", 33, 127);
         g2d.drawString(Integer.toString(level), 112, 105);
 
-        if(clueStat.equals("not found")){
-            g2d.setColor(Color.RED);
-        }
-        else if(clueStat.equals("found")){
-            g2d.setColor(Color.GREEN);
-        }
-        g2d.drawString(clueStat, 112, 127);
+        g2d.setColor(Color.RED);
+        g2d.drawString(timer, 112, 127);
     }
 
     public int getLevel(){
@@ -75,8 +73,55 @@ public class Status{
     public void nextLevel(){
         level += 1;
     }
+	
+	public void setLevel(int level){
+		this.level = level;
+	}
 
-    // public boolean clueIsFound(){
-        
-    // }
+    public void setTimer(int m1, int m2, int s1, int s2){
+        mins1 = m1;
+        mins2 = m2;
+        secs1 = s1;
+        secs2 = s2;
+    }
+
+    public int getMins1(){return mins1;}
+    public int getMins2(){return mins2;}
+    public int getSecs1(){return secs1;}
+    public int getSecs2(){return secs2;}
+
+    public void timerCountdown(){
+        if (secs2 > 0) {
+            secs2--;
+        } 
+        else {
+            if (secs1 > 0) {
+                secs1--;
+                secs2 = 9;
+            } 
+            else {
+                if (mins2 > 0) {
+                    mins2--;
+                    secs1 = 5;
+                    secs2 = 9;
+                } 
+                else {
+                    if (mins1 > 0) {
+                        mins1--;
+                        mins2 = 9;
+                        secs1 = 5;
+                        secs2 = 9;
+                    } 
+                    else {
+                        timeOver = true;
+                    }
+                }
+            }
+        }
+        timer = mins1+mins2+":"+secs1+secs2;
+    }
+
+    public boolean timeIsOver(){
+        return timeOver;
+    }
 }
