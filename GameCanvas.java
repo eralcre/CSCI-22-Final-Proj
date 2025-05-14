@@ -19,7 +19,7 @@ public class GameCanvas extends JComponent {
     private Rectangle nextPlayerBounds, doorBounds;
     private Clue clue;
     private int clueBoundsIndex;
-    private Timer animationTimer, levelTimer, attackTimer;
+    private Timer animationTimer, levelTimer, attackTimer, monsterTimerL, monsterTimerR, monsterTimerA;
 	private boolean playerIsReady;
 	private boolean startButtonClicked;
 
@@ -31,7 +31,12 @@ public class GameCanvas extends JComponent {
 	private boolean pPressed = false;
 
 	private Attack playerAttack;
-	private boolean playerAttacked;
+	private boolean playerAttacks;
+
+	private Monster monster;
+	private boolean monsterAttacks;
+
+	private Health playerLife;
 
     public GameCanvas(String playerNumber) {
         this.playerNumber = playerNumber;
@@ -40,7 +45,8 @@ public class GameCanvas extends JComponent {
         hintClickCount = 0;
         clueFound = false;
         clueIsClicked = false;
-		playerAttacked = false;
+		playerAttacks = false;
+		monsterAttacks = false;
         startScreen = new Start();
         GOScreen = new GameOver();
         gameStart();
@@ -77,6 +83,8 @@ public class GameCanvas extends JComponent {
 		if (playerNumber.equals("Player 1")) {
 			if (gameStat.getLevel() == 3) {
 				room = new BossRoom();
+				monster = new Monster();
+				playerLife = new Health();
 				player.setPosition(300, 639);
 				gameStat.setTimer(0, 2, 0, 0);
 				repaint();
@@ -94,6 +102,8 @@ public class GameCanvas extends JComponent {
 						break;
 					case 3:
 						room = new BossRoom();
+						monster = new Monster();
+						playerLife = new Health();
 						player.setPosition(600, 639);
 						gameStat.setTimer(0, 2, 0, 0);
 						repaint();
@@ -345,7 +355,6 @@ public class GameCanvas extends JComponent {
                 repaint();
             }
         };
-
         levelTimer = new Timer(1000, levelTimerListener);
 
 		ActionListener attackTimerListener = new ActionListener() {
@@ -354,11 +363,75 @@ public class GameCanvas extends JComponent {
 				repaint();
 			}
 		};
+		attackTimer = new Timer(200, attackTimerListener);
 
-		attackTimer = new Timer(300, attackTimerListener);
+		ActionListener monsterTimerListenerL = new ActionListener() {
+			int count = 0;
+			public void actionPerformed(ActionEvent ae){
+				monster.moveMonster("left");
+				if(count==20){
+					monster.monsterAttacks(true);
+				}
+				if (count==35){
+					monster.monsterAttacks(false);
+				}
+				repaint();
+				count++;
+			}
+		};
+		monsterTimerL = new Timer(200, monsterTimerListenerL);
+
+		ActionListener monsterTimerListenerR = new ActionListener() {
+			int count = 0;
+			public void actionPerformed(ActionEvent ae){
+				monster.moveMonster("right");
+				if(count==20){
+					monster.monsterAttacks(true);
+				}
+				if (count==35){
+					monster.monsterAttacks(false);
+				}
+				repaint();
+				count++;
+			}
+		};
+		monsterTimerR = new Timer(200, monsterTimerListenerR);
+
+		ActionListener monsterTimerListenerA = new ActionListener() {
+			int count = 0;
+			int trigger = (int)(Math.random()*10);
+			boolean mtLisMoving = false;
+			boolean mtRisMoving = false;
+			public void actionPerformed(ActionEvent ae){
+				if(count == trigger){
+					if(count%2==0){
+						monsterTimerL.start();
+						mtLisMoving = true;
+					}
+					else{
+						monsterTimerR.start();
+						mtRisMoving = true;
+					}
+				}
+				
+				if(count==15 && mtLisMoving){
+					monsterTimerL.stop();
+					mtLisMoving = false;
+					trigger = (int)(Math.random()*10);
+					count = 0;
+				}
+				else if(count == 15 && mtRisMoving){
+					monsterTimerR.stop();
+					mtRisMoving = false;
+					trigger = (int)(Math.random()*10);
+					count = 0;
+				}
+
+				count++;
+			}
+		};
+		monsterTimerA = new Timer(1000, monsterTimerListenerA);		
     }
-
-
 
 	private void setUpStartMouseClicked(){
 		MouseAdapter ma = new MouseAdapter() {
@@ -501,12 +574,16 @@ public class GameCanvas extends JComponent {
         }
         gameStat.draw(g2d);
         hint.drawHintIcon(g2d);
+		
+		if (gameStat.getLevel()==3) {
+			monster.drawMonster(g2d);
+			playerLife.draw(g2d);
+		}
 
-        if (gameStarted==false){
-            startScreen.drawStartScreen(g2d);
-            startScreen.drawStartButton(g2d, startButtonClicked);
-        }
-
+        if (playerAttacks) {
+			playerAttack.drawAttack(g2d);
+		}
+		
         if (hintIsClicked) {
             hint.drawHintBox(g2d, getLevel(), playerNumber);
         }
@@ -517,12 +594,13 @@ public class GameCanvas extends JComponent {
             clue.drawClueBox(g2d, clueBoundsIndex);
             clue.drawX(g2d);
         }
-
-		if (playerAttacked) {
-			playerAttack.drawAttack(g2d);
-		}
 		
-		if (gameOver){
+		if (gameStarted==false) {
+            startScreen.drawStartScreen(g2d);
+            startScreen.drawStartButton(g2d, startButtonClicked);
+        }
+		
+		if (gameOver) {
             GOScreen.drawGameOverScreen(g2d);
             GOScreen.drawRestartButton(g2d);
         }
