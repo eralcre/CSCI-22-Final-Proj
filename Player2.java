@@ -29,7 +29,7 @@ public class Player2 extends Player {
                 character = new ImageIcon("P2/Player2R.png").getImage();
                 break;
             default:
-                character = new ImageIcon("P2/Player2F.png").getImage();
+                character = new ImageIcon("P2/Player2B.png").getImage();
         }
     }
 

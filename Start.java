@@ -41,7 +41,6 @@ public class Start{
 		g2d.setColor(Color.RED);
 
 		if (clicked) {
-            g2d.setColor(Color.GREEN);
 			g2d.drawString("Waiting", 435, 477);
 		} else {
 			g2d.drawString("Start", 453, 477);

@@ -15,10 +15,10 @@ public class Clue{
         borderColor = new Color(79,29,20);
         clueColor = new Color(255,187,0);
         bgColor = Color.BLACK;
-		clue1 = new ImageIcon("Clues/Fake/Bookshelf.png").getImage();
-        clue2 = new ImageIcon("Clues/Level1/MazeMaps.png").getImage();
-		clue3 = new ImageIcon("Clues/Fake/Potions.png").getImage();
-		clue4 = new ImageIcon("Clues/Level2/Blackboard.png").getImage();
+		clue1 = new ImageIcon("Clues/Bookshelf.png").getImage();
+        clue2 = new ImageIcon("Clues/MazeMaps.png").getImage();
+		clue3 = new ImageIcon("Clues/Potions.png").getImage();
+		clue4 = new ImageIcon("Clues/Blackboard.png").getImage();
    
         try {
             textFont = Font.createFont(Font.TRUETYPE_FONT, new File("Font/PixelifySans-Bold.ttf"));

@@ -39,10 +39,10 @@ public class Monster{
         centerEye = new Ellipse2D.Double(x+468, y+177, 90, 90);
         g2d.setColor(eyeColor);
         g2d.fill(centerEye);
-        g2d.drawImage(sideR, x+638, y+130, null);
-        g2d.drawImage(sideL, x+513, y+130, null);
+        g2d.drawImage(sideR, x+513, y+130, null);
+        g2d.drawImage(sideL, x+388, y+130, null);
 
-        smallEye1 = new Ellipse2D.Double(x+467, y+142, 24, 44);
+        smallEye1 = new Ellipse2D.Double(x+476, y+142, 24, 44);
         smallEye2 = new Ellipse2D.Double(x+499, y+130, 28, 50);
         smallEye3 = new Ellipse2D.Double(x+526, y+142, 24, 44);
         g2d.setColor(eyeColor2);

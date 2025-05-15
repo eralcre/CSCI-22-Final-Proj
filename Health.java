@@ -10,7 +10,7 @@ public class Health{
         life1 = new ImageIcon("BossRoom/Heart1.png").getImage();
         life2 = new ImageIcon("BossRoom/Heart1.png").getImage();
         life3 = new ImageIcon("BossRoom/Heart1.png").getImage();
-    }
+    }	
 
     public void draw(Graphics2D g2d){
         g2d.drawImage(life1, 752, 12, null);        
@@ -26,8 +26,12 @@ public class Health{
         else if(lifeCount == 1){
             life2 = new ImageIcon("BossRoom/Heart2.png").getImage();
         }
-        else if(lifeCount == 1){
+        else if(lifeCount == 0){
             life1 = new ImageIcon("BossRoom/Heart2.png").getImage();
         }
     }
+	
+	public int getLifeCount(){
+		return lifeCount;
+	}
 }

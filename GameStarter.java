@@ -92,12 +92,23 @@ public class GameStarter {
 						dataOut.writeInt(gameStart.getPlayerX());
 						dataOut.writeInt(gameStart.getPlayerY());
 
+						if (gameStart.shouldSendAttack()) {
+							dataOut.writeUTF("ATTACK");
+							dataOut.writeInt(gameStart.getPlayerX());
+							dataOut.writeInt(gameStart.getPlayerY());
+						}
+
 						if (dataIn.available() > 0) {
 							String msg = dataIn.readUTF();
 							if (msg.equals("POSITION")) {
 								int x = dataIn.readInt();
 								int y = dataIn.readInt();
 								gameStart.updateOtherPlayerPosition(x, y);
+							}
+							else if (msg.equals("ATTACK")) {
+								int x = dataIn.readInt();
+								int y = dataIn.readInt();
+								gameStart.spawnOtherPlayerAttack(x, y);
 							}
 						}
 					}

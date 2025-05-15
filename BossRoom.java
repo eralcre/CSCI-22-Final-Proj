@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.util.ArrayList;
+import java.awt.geom.*;
 import javax.swing.*;
 
 public class BossRoom implements Room{
