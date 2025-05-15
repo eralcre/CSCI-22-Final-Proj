@@ -450,20 +450,6 @@ public class GameCanvas extends JComponent {
 		this.addMouseListener(ma);
 	}
 
-    private void setUpGameOverMouseClicked(){
-        MouseAdapter ma = new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				Point p = e.getPoint();
-				if ((GOScreen.restartButtonArea()!=null) && (GOScreen.restartButtonArea().contains(p))) {
-                    gameStart();
-					repaint();
-				}
-			}
-		};
-		this.addMouseListener(ma);
-    }
-
     private void setUpHintMouseClicked() {
         MouseAdapter ma = new MouseAdapter() {
             @Override
@@ -540,7 +526,6 @@ public class GameCanvas extends JComponent {
         levelTimer.start();
 		setupKeyBindings();
 		setUpActions();
-		setUpGameOverMouseClicked();
         setUpHintMouseClicked();
         setUpClueMouseClicked();
 		setUpPatternMouseClicked();
@@ -602,7 +587,6 @@ public class GameCanvas extends JComponent {
 		
 		if (gameOver) {
             GOScreen.drawGameOverScreen(g2d);
-            GOScreen.drawRestartButton(g2d);
         }
     }
 }
