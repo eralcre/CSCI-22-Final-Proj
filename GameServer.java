@@ -122,6 +122,13 @@ public class GameServer {
 								dataOut2.writeInt(x);
 								dataOut2.writeInt(y);
 							}
+							else if (msg.equals("ATTACK")) {
+								int x = dataIn1.readInt();
+								int y = dataIn1.readInt();
+								dataOut2.writeUTF("ATTACK");
+								dataOut2.writeInt(x);
+								dataOut2.writeInt(y);
+							}
 						}
 
 						if (dataIn2.available() > 0) {
@@ -130,6 +137,13 @@ public class GameServer {
 								int x = dataIn2.readInt();
 								int y = dataIn2.readInt();
 								dataOut1.writeUTF("POSITION");
+								dataOut1.writeInt(x);
+								dataOut1.writeInt(y);
+							}
+							else if (msg.equals("ATTACK")) {
+								int x = dataIn2.readInt();
+								int y = dataIn2.readInt();
+								dataOut1.writeUTF("ATTACK");
 								dataOut1.writeInt(x);
 								dataOut1.writeInt(y);
 							}

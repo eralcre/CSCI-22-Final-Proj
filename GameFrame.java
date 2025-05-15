@@ -20,18 +20,6 @@ public class GameFrame {
         frame.setVisible(true);
     }
 
-    public int getPlayerX() {
-        return gc.getPlayerX();
-    }
-
-    public int getPlayerY() {
-        return gc.getPlayerY();
-    }
-
-    public void updateOtherPlayerPosition(int x, int y) {
-        gc.updateOtherPlayerPosition(x, y);
-    }
-
  	public int updateGameLevel(){
 		return gc.getLevel();
 	}
@@ -47,4 +35,24 @@ public class GameFrame {
     public void startGameFromServer() {
         gc.startGame();
     }
+	
+    public int getPlayerX() {
+        return gc.getPlayerX();
+    }
+
+    public int getPlayerY() {
+        return gc.getPlayerY();
+    }
+
+    public void updateOtherPlayerPosition(int x, int y) {
+        gc.updateOtherPlayerPosition(x, y);
+    }
+
+	public void spawnOtherPlayerAttack(int x, int y) {
+		gc.spawnOtherPlayerAttack(x, y);
+	}
+
+	public boolean shouldSendAttack() {
+		return gc.shouldSendAttack();
+	}
 }

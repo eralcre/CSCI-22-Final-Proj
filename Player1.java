@@ -29,7 +29,7 @@ public class Player1 extends Player {
                 character = new ImageIcon("P1/Player1R.png").getImage();
                 break;
             default:
-                character = new ImageIcon("P1/Player1F.png").getImage();
+                character = new ImageIcon("P1/Player1B.png").getImage();
         }
     }
 
@@ -37,6 +37,12 @@ public class Player1 extends Player {
     public Image characterImage(){
         return character;
     }
+	
+	@Override
+	public void setPosition(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
 
     @Override
     public int getX() {return x;}
