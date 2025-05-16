@@ -31,6 +31,10 @@ public class MazeRoom implements Room{
      */
     public MazeRoom(){
         mazeRoomObjs = new ArrayList<>();
+        // Images from Stardew Valley Planner
+        // URL: https://stardewplanner.com/
+        // Accessed: May 16, 2025
+        // Note: Used for design and map layout inspiration only; no code copied
         bg = new ImageIcon("MazeRoom/MazeRoomBG.png").getImage();
         door = new ImageIcon("MazeRoom/Door.png").getImage();
 

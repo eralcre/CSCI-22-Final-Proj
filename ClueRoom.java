@@ -30,6 +30,11 @@ public class ClueRoom implements Room{
      */
     public ClueRoom(){
         clueRoomObjs = new ArrayList<>();
+
+        // Images from Stardew Valley Planner
+        // URL: https://stardewplanner.com/
+        // Accessed: May 16, 2025
+        // Note: Used for design and map layout inspiration only; no code copied
         bg = new ImageIcon("ClueRoom/ClueRoomBG.png").getImage();
         bookshelf = new ImageIcon("ClueRoom/Bookshelf.png").getImage();
         shelf = new ImageIcon("ClueRoom/shelf.png").getImage();

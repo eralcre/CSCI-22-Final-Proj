@@ -42,6 +42,10 @@ public class Player2 extends Player {
      */
     @Override
     public void appearance(String position){
+        // Images from Stardew Valley Dress Up Tool by Lybell
+        // URL: https://lybell-art.github.io/stardew-dressup/
+        // Accessed: May 16, 2025
+        // Note: Only used as images; no code was copied
         switch (position) {
             case "F":
                 character = new ImageIcon("P2/Player2F.png").getImage();

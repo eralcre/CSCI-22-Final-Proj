@@ -1,22 +1,20 @@
 import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.*;
-import java.util.ArrayList;
 
-public class Monster {
+public class Monster{
     private Color mainColor, highlight, shadow, eyeColor, eyeColor2, effectColor;
     private int x, y;
     private Image sideR, sideL, healthbar, health;
-    private Ellipse2D.Double mShadow, centerEye, smallEye1, smallEye2, smallEye3, monsterHitbox;
+    private Ellipse2D.Double mShadow, centerEye, smallEye1, smallEye2, smallEye3;
     private boolean mAttack;
     private Rectangle2D.Double attack1, attack2;
     private Ellipse2D.Double effect1, effect2, eyeEffect;
-    private ArrayList<Shape> monsterAttackBounds;
 
-    public Monster() {
+    public Monster(){
         x = 0;
         y = 0;
-
+        
         mAttack = false;
 
         mainColor = new Color(22, 20, 20);
@@ -29,11 +27,12 @@ public class Monster {
         sideR = new ImageIcon("Monster/sideR.png").getImage();
         sideL = new ImageIcon("Monster/sideL.png").getImage();
 
+        // Asset: Health Bar by DanoPix
+        // URL: https://danopix.itch.io/health-bar-by-dano
+        // Accessed: May 16, 2025
+        // Note: Used for the images below
         healthbar = new ImageIcon("Monster/healthBar.png").getImage();
         health = new ImageIcon("Monster/100H.png").getImage();
-
-        monsterAttackBounds = new ArrayList<>();
-        monsterHitbox = new Ellipse2D.Double(x + 383, y + 114, 257, 186);
     }
 
     public void drawMonster(Graphics2D g2d){
@@ -106,7 +105,11 @@ public class Monster {
         }
     }
 
-    public void updateHealth(int hp) {
+    public void updateHealth(int hp){
+        // Asset: Health Bar by DanoPix
+        // URL: https://danopix.itch.io/health-bar-by-dano
+        // Accessed: May 16, 2025
+        // Note: Used for the images below
         switch (hp) {
             case 80:
                 health = new ImageIcon("Monster/80H.png").getImage();
@@ -128,11 +131,11 @@ public class Monster {
         }
     }
 
-    public void monsterAttacks(boolean a) {
+    public void monsterAttacks(boolean a){
         mAttack = a;
     }
 
-    public void moveMonster(String direction) {
+    public void moveMonster(String direction){
         switch (direction) {
             case "left":
                 x -= 5;
@@ -143,25 +146,5 @@ public class Monster {
             default:
                 throw new AssertionError();
         }
-
-        monsterHitbox.x = x + 383;
-        monsterHitbox.y = y + 114;
-    }
-
-    public ArrayList<Shape> getMonsterAttackHitbox() {
-        monsterAttackBounds.clear();
-
-        if (mAttack) {
-            monsterAttackBounds.add(attack1);
-            monsterAttackBounds.add(attack2);
-            monsterAttackBounds.add(effect1);
-            monsterAttackBounds.add(effect2);
-        }
-
-        return monsterAttackBounds;
-    }
-
-    public Ellipse2D.Double getMonsterHitbox() {
-        return monsterHitbox;
     }
 }

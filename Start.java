@@ -46,6 +46,10 @@ public class Start{
             System.out.println("FontFormatException from start Font.");
         }
 
+        // Asset: Gothicvania Magic Pack 9 by Ansimuz
+        // URL: https://ansimuz.itch.io/gothicvania-magic-pack-9
+        // Accessed: May 16, 2025
+        // Note: Used some of the assets to design the game title below
         title = new ImageIcon("GameTitle/title.png").getImage();
     }
 

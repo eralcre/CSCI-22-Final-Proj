@@ -39,6 +39,12 @@ public class MatchingRoom extends JComponent implements Room {
 
     public MatchingRoom(){
         matchingRoomObjs = new ArrayList<>();
+
+        // Images from Stardew Valley Planner
+        // URL: https://stardewplanner.com/
+        // Accessed: May 16, 2025
+        // Note: Used for design and map layout inspiration only; no code copied
+
         bg = new ImageIcon("MatchingRoom/MatchingRoomBG.png").getImage();
         door = new ImageIcon("MatchingRoom/Door.png").getImage();
 		fence = new ImageIcon("MatchingRoom/Fence.png").getImage();

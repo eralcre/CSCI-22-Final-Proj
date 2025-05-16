@@ -24,6 +24,10 @@ public class Health{
      */
     public Health(){
         lifeCount = 3;
+        // Asset: Free Pixel Art Health Hearts 16x16 by Redreeh
+        // URL: https://redreeh.itch.io/pixelhearts-16x16
+        // Accessed: May 16, 2025
+        // Note: Used for the images below
         life1 = new ImageIcon("BossRoom/Heart1.png").getImage();
         life2 = new ImageIcon("BossRoom/Heart1.png").getImage();
         life3 = new ImageIcon("BossRoom/Heart1.png").getImage();
