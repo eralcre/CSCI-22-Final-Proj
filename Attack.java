@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.awt.geom.*;
 
-public class Attack{
+public class Attack {
     private Color color1, color2;
     private int playerX, playerY, playerW, size1, size2, size3;
     private int attackX, attackY;
@@ -18,27 +18,38 @@ public class Attack{
         playerY = y;
         playerW = w;
 
-        attackX = playerX+(playerW/2)-(size1/2);
-        attackY = playerY-40;
+        attackX = playerX + (playerW / 2) - (size1 / 2);
+        attackY = playerY - 40;
+
+        updateAttackBounds();
     }
 
-	public void drawAttack(Graphics2D g2d){
-		attack1 = new Ellipse2D.Double(attackX,attackY,size1,size1);
-		attack2 = new Ellipse2D.Double(attackX-5,attackY-5,size2,size2);
-		attack3 = new Ellipse2D.Double(attackX-10,attackY-10,size3,size3);
-		
-		g2d.setColor(color2);
-		g2d.fill(attack3);
-		g2d.fill(attack2);
-		g2d.setColor(color1);
-		g2d.fill(attack1);
-	}
+    public void drawAttack(Graphics2D g2d){
+        updateAttackBounds();
+
+        g2d.setColor(color2);
+        g2d.fill(attack3);
+        g2d.fill(attack2);
+        g2d.setColor(color1);
+        g2d.fill(attack1);
+    }
+
+    private void updateAttackBounds() {
+        attack1 = new Ellipse2D.Double(attackX, attackY, size1, size1);
+        attack2 = new Ellipse2D.Double(attackX - 5, attackY - 5, size2, size2);
+        attack3 = new Ellipse2D.Double(attackX - 10, attackY - 10, size3, size3);
+    }
+
+    public Ellipse2D.Double getAttackHitbox() {
+        return attack3;
+    }
 
     public void moveAttack(){
         attackY -= 10;
+        updateAttackBounds();
     }
-	
-	public int getAttackY() {
-		return attackY;
-	}
+
+    public int getAttackY() {
+        return attackY;
+    }
 }
