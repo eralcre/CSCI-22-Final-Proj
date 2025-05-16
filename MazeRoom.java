@@ -1,6 +1,21 @@
+/**
+This is the MazeRoom class. It draws the Maze Room and creates shapes to represent object bounds to prevent
+the player from passing through the maze walls.
+@author Edward Francis S. Ibera (242267) & Erin Clare G. Maranan (242916)
+@version 19 May 2025
+We have not discussed the Java language code in our program
+with anyone other than our instructor or the teaching assistants
+assigned to this course.
+We have not used Java language code obtained from another student,
+or any other unauthorized source, either modified or unmodified.
+If any Java language code or documentation used in our program
+was obtained from another source, such as a textbook or website,
+that has been clearly noted with a proper citation in the comments
+of our program.
+**/
 import java.awt.*;
-import java.util.ArrayList;
 import java.awt.geom.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 public class MazeRoom implements Room{
@@ -10,6 +25,10 @@ public class MazeRoom implements Room{
     private GameObject doorObj;
     private Rectangle doorBounds;
 
+    /**
+     * This Constructor initializes the arraylist of mazeRoomObjs, the images of objects in the maze room, and
+     * calls the method that creates the objects and the shapes that define object bounds.
+     */
     public MazeRoom(){
         mazeRoomObjs = new ArrayList<>();
         bg = new ImageIcon("MazeRoom/MazeRoomBG.png").getImage();
@@ -21,6 +40,10 @@ public class MazeRoom implements Room{
         createObjectBounds();
     }
 
+    /**
+     * overrides the createObjs() method from the Room interface
+     * and compiles the interactive objects in an arraylist
+     */
     @Override
     public void createObjs(){
         doorObj = new GameObject(door, 461, 46, 104, 146);
@@ -28,8 +51,16 @@ public class MazeRoom implements Room{
         mazeRoomObjs.add(doorObj);  
     }
 
+    /**
+     * overrides the draw(Graphics g) method from the Room interface
+     * and draws all the objects the make up the room
+     */
     @Override
     public void draw(Graphics g){
+        // Source: Oracle, "Drawing an Image", The Java™ Tutorials
+        // URL: https://docs.oracle.com/javase/tutorial/2d/images/drawimage.html
+        // Accessed: May 16, 2025
+        // Note: Adapted from official Oracle Java 2D tutorial
         g.drawImage(bg, 0, 0, 1024, 768, null);        
         g.drawImage(door, 461, 46, 104, 146, null);
 
@@ -38,10 +69,10 @@ public class MazeRoom implements Room{
         }
     }
 
-    public ArrayList<GameObject> getMazeRoomObjs(){
-        return mazeRoomObjs;
-    }
-
+    /**
+     * overrides the createObjectBounds() method from the Room interface
+     * and creates an arraylist of shapes to define the bounds of the objects
+     */
     @Override
     public void createObjectBounds(){
         objectBounds = new ArrayList<>();
@@ -84,11 +115,19 @@ public class MazeRoom implements Room{
 		objectBounds.add(new Line2D.Double(675.5, 196, 674.5, 301));
     }
 
+    /**
+     * overrides the getObjectBounds() method from the Room interface
+     * and returns the arraylist of object bounds
+     */
     @Override
     public ArrayList<Shape> getObjectBounds() {
         return objectBounds;
     }
 
+    /**
+     * overrides the getOthrObjBounds() method from the Room interface
+     * and returns the arraylist of other object bounds
+     */
     @Override
 	public ArrayList<Shape> getOthrObjBounds() {
 		return new ArrayList<>();
