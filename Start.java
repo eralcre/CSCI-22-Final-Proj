@@ -20,7 +20,7 @@ public class Start{
             System.out.println("FontFormatException from Status Font.");
         }
 
-        title = new ImageIcon("Hints/sampleHint.png").getImage();
+        title = new ImageIcon("GameTitle/title.png").getImage();
     }
 
     public void drawStartScreen(Graphics2D g2d){
@@ -28,7 +28,7 @@ public class Start{
         g2d.setColor(bgColor);
         g2d.fill(startScreen);
        
-        g2d.drawImage(title, 76, 87, 871, 308, null);
+        g2d.drawImage(title, 213, 114, null);
     }
 
     public void drawStartButton(Graphics2D g2d, boolean clicked){
