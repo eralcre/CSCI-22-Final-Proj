@@ -546,8 +546,7 @@ public class GameCanvas extends JComponent {
 				ArrayList<Shape> monsterAttacks = monster.getMonsterAttackHitbox();
 
 				for (Shape attack : monsterAttacks) {
-					Rectangle2D attackRect = attack.getBounds2D();
-					if (playerBounds.intersects(attackRect)) {
+					if (playerBounds.intersects(attack)) {
 						playerLife.lossLife();
 
 						if (playerLife.getLifeCount() <= 0) {
