@@ -91,28 +91,38 @@ public class GameStarter {
 						dataOut.writeUTF("POSITION");
 						dataOut.writeInt(gameStart.getPlayerX());
 						dataOut.writeInt(gameStart.getPlayerY());
+						dataOut.flush();
 
-						if (gameStart.shouldSendAttack()) {
-							dataOut.writeUTF("ATTACK");
-							dataOut.writeInt(gameStart.getPlayerX());
-							dataOut.writeInt(gameStart.getPlayerY());
-						}
+						dataOut.writeUTF("BOSSHP");
+						dataOut.writeInt(gameStart.getBossHp());
+						dataOut.flush();
 
-						if (dataIn.available() > 0) {
-							String msg = dataIn.readUTF();
-							if (msg.equals("POSITION")) {
+						dataOut.writeUTF("GAMEOVER");
+						dataOut.writeBoolean(gameStart.isGameOver());
+						dataOut.flush();
+
+						while (dataIn.available() > 0) {
+							String msgType = dataIn.readUTF();
+							if (msgType.equals("POSITION")) {
 								int x = dataIn.readInt();
 								int y = dataIn.readInt();
 								gameStart.updateOtherPlayerPosition(x, y);
+							} 
+							else if (msgType.equals("BOSSHP")) {
+								int otherPlayerHp = dataIn.readInt();
+								int currentHp = gameStart.getBossHp();
+								if (otherPlayerHp < currentHp) {
+									gameStart.updateBossHp(otherPlayerHp);
+								}
 							}
-							else if (msg.equals("ATTACK")) {
-								int x = dataIn.readInt();
-								int y = dataIn.readInt();
-								gameStart.spawnOtherPlayerAttack(x, y);
+							else if (msgType.equals("GAMEOVER")) {
+								boolean otherGameOver = dataIn.readBoolean();
+								if (otherGameOver) {
+									gameStart.updateGameOver(true);
+								}
 							}
 						}
 					}
-
 					Thread.sleep(100);
 				}
 			} catch (Exception e) {

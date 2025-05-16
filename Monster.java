@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Monster {
     private Color mainColor, highlight, shadow, eyeColor, eyeColor2, effectColor;
-    private int x, y, currentHp;
+    private int x, y, currentHp, healthXChange, healthYChange;
     private Image sideR, sideL, healthbar, health;
     private Ellipse2D.Double mShadow, centerEye, smallEye1, smallEye2, smallEye3, monsterHitbox;
     private boolean mAttack;
@@ -35,6 +35,8 @@ public class Monster {
         monsterAttackBounds = new ArrayList<>();
         monsterHitbox = new Ellipse2D.Double(x + 383, y + 114, 257, 186);
 		currentHp = 100;
+        healthXChange = 0;
+        healthYChange = 0;
     }
 
     public void drawMonster(Graphics2D g2d){
@@ -75,35 +77,35 @@ public class Monster {
         g2d.fill(smallEye1);
         g2d.fill(smallEye2);
         g2d.fill(smallEye3);
-		
-        int healthX = x + 355;
-        int healthY = y + 68;
+
+        int healthX = x + 355 + healthXChange;
+        int healthY = y + 68 + healthYChange;
 
         switch (currentHp) {
             case 80:
-                healthY = y + 59;
+                healthYChange =  59 - 68;
                 break;
             case 60:
-                healthX = x + 345;
-                healthY = y + 49;
+                healthXChange =  345 - 355;
+                healthYChange =  49 - 68;
                 break;
             case 40:
-                healthX = x + 353;
-                healthY = y + 61;
+                healthXChange =  353 - 355;
+                healthYChange =  61 - 68;
                 break;
             case 20:
-                healthX = x + 332;
-                healthY = y + 54;
+                healthXChange =  332 - 355;
+                healthYChange =  54 - 68;
                 break;
             case 0:
-                healthX = x + 343;
-                healthY = y + 49;
+                healthXChange =  343 - 355;
+                healthYChange =  49 - 68;
                 break;
             default:
                 break;
         }
         g2d.drawImage(health, healthX, healthY, null);
-        g2d.drawImage(healthbar, x+349, y+49, null);
+        g2d.drawImage(healthbar, x + 349, y + 49, null);
 
         g2d.setColor(new Color(240, 170, 235, 66));
         eyeEffect = new Ellipse2D.Double(x+407, y+218, 211, 7);
@@ -192,4 +194,8 @@ public class Monster {
     public Ellipse2D.Double getMonsterHitbox() {
         return monsterHitbox;
     }
+	
+	public int getCurrentHp(){
+		return currentHp;
+	}
 }

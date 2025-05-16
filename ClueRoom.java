@@ -1,18 +1,3 @@
-/**
-This is the ClueRoom class. It draws the Clue Room and allows for some of the objects in the room to be
-interactive by creating shapes to represent object bounds.
-@author Edward Francis S. Ibera (242267) & Erin Clare G. Maranan (242916)
-@version 19 May 2025
-We have not discussed the Java language code in our program
-with anyone other than our instructor or the teaching assistants
-assigned to this course.
-We have not used Java language code obtained from another student,
-or any other unauthorized source, either modified or unmodified.
-If any Java language code or documentation used in our program
-was obtained from another source, such as a textbook or website,
-that has been clearly noted with a proper citation in the comments
-of our program.
-**/
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
@@ -24,17 +9,8 @@ public class ClueRoom implements Room{
     private GameObject bookshelfObj, tableObj, potionsObj, dresserObj;
     private Rectangle bookshelfBounds, tableBounds, potionsBounds, dresserBounds;
 
-    /**
-     * This Constructor initializes the arraylist of clueRoomObjs, the images of objects in the clue room, and
-     * calls the method that creates the clue objects and the shapes that define object bounds.
-     */
     public ClueRoom(){
         clueRoomObjs = new ArrayList<>();
-
-        // Images from Stardew Valley Planner
-        // URL: https://stardewplanner.com/
-        // Accessed: May 16, 2025
-        // Note: Used for design and map layout inspiration only; no code copied
         bg = new ImageIcon("ClueRoom/ClueRoomBG.png").getImage();
         bookshelf = new ImageIcon("ClueRoom/Bookshelf.png").getImage();
         shelf = new ImageIcon("ClueRoom/shelf.png").getImage();
@@ -56,10 +32,6 @@ public class ClueRoom implements Room{
         createObjectBounds();
     }
 
-    /**
-     * overrides the createObjs() method from the Room interface
-     * and compiles the interactive clue objects in an arraylist
-     */
     @Override
     public void createObjs(){
         bookshelfObj = new GameObject(bookshelf, 414, 64, 212, 204);
@@ -73,16 +45,8 @@ public class ClueRoom implements Room{
         clueRoomObjs.add(dresserObj);   
     }
 
-    /**
-     * overrides the draw(Graphics g) method from the Room interface
-     * and draws all the objects the make up the room
-     */
     @Override
     public void draw(Graphics g){
-        // Source: Oracle, "Drawing an Image", The Java™ Tutorials
-        // URL: https://docs.oracle.com/javase/tutorial/2d/images/drawimage.html
-        // Accessed: May 16, 2025
-        // Note: Adapted from official Oracle Java 2D tutorial
         g.drawImage(bg, 0, 0, 1024, 768, null);        
         g.drawImage(shelf, 84, 41, 175, 234, null);
         g.drawImage(shelf, 239, 41, 175, 234, null);
@@ -102,10 +66,10 @@ public class ClueRoom implements Room{
         g.drawImage(plant, 907, 600, 79, 128, null);
     }
 
-    /**
-     * overrides the createObjectBounds() method from the Room interface
-     * and creates an arraylist of shapes to define the bounds of the objects
-     */
+    public ArrayList<GameObject> getClueRoomObjs(){
+        return clueRoomObjs;
+    }
+
     @Override
     public void createObjectBounds(){
         objectBounds = new ArrayList<>();
@@ -132,19 +96,11 @@ public class ClueRoom implements Room{
         clueObjBounds.add(dresserBounds);
     }
 
-    /**
-     * overrides the getObjectBounds() method from the Room interface
-     * and returns the arraylist of object bounds
-     */
     @Override
     public ArrayList<Shape> getObjectBounds(){
         return objectBounds;
     }
 
-    /**
-     * overrides the getOthrObjBounds() method from the Room interface
-     * and returns the arraylist of clue object bounds
-     */
     @Override
     public ArrayList<Shape> getOthrObjBounds(){
         return clueObjBounds;

@@ -107,49 +107,59 @@ public class GameServer {
 						level1 = dataIn1.readInt();
 						level2 = dataIn2.readInt();
 						syncedLevel = Math.max(level1, level2);
-
 						dataOut1.writeInt(syncedLevel);
 						dataOut2.writeInt(syncedLevel);
 					}
-					
+
 					if (syncedLevel == 3) {
-						if (dataIn1.available() > 0) {
-							String msg = dataIn1.readUTF();
-							if (msg.equals("POSITION")) {
+						while (dataIn1.available() > 0) {
+							String msgType = dataIn1.readUTF();
+							if (msgType.equals("POSITION")) {
 								int x = dataIn1.readInt();
 								int y = dataIn1.readInt();
 								dataOut2.writeUTF("POSITION");
 								dataOut2.writeInt(x);
 								dataOut2.writeInt(y);
+								dataOut2.flush();
+							} 
+							else if (msgType.equals("BOSSHP")) {
+								int hp1 = dataIn1.readInt();
+								dataOut2.writeUTF("BOSSHP");
+								dataOut2.writeInt(hp1);
+								dataOut2.flush();
 							}
-							else if (msg.equals("ATTACK")) {
-								int x = dataIn1.readInt();
-								int y = dataIn1.readInt();
-								dataOut2.writeUTF("ATTACK");
-								dataOut2.writeInt(x);
-								dataOut2.writeInt(y);
+							else if (msgType.equals("GAMEOVER")) {
+								boolean gameOver1 = dataIn1.readBoolean();
+								dataOut2.writeUTF("GAMEOVER");
+								dataOut2.writeBoolean(gameOver1);
+								dataOut2.flush();
 							}
 						}
 
-						if (dataIn2.available() > 0) {
-							String msg = dataIn2.readUTF();
-							if (msg.equals("POSITION")) {
+						while (dataIn2.available() > 0) {
+							String msgType = dataIn2.readUTF();
+							if (msgType.equals("POSITION")) {
 								int x = dataIn2.readInt();
 								int y = dataIn2.readInt();
 								dataOut1.writeUTF("POSITION");
 								dataOut1.writeInt(x);
 								dataOut1.writeInt(y);
+								dataOut1.flush();
 							}
-							else if (msg.equals("ATTACK")) {
-								int x = dataIn2.readInt();
-								int y = dataIn2.readInt();
-								dataOut1.writeUTF("ATTACK");
-								dataOut1.writeInt(x);
-								dataOut1.writeInt(y);
+							else if (msgType.equals("BOSSHP")) {
+								int hp2 = dataIn2.readInt();
+								dataOut1.writeUTF("BOSSHP");
+								dataOut1.writeInt(hp2);
+								dataOut1.flush();
+							}
+							else if (msgType.equals("GAMEOVER")) {
+								boolean gameOver2 = dataIn2.readBoolean();
+								dataOut1.writeUTF("GAMEOVER");
+								dataOut1.writeBoolean(gameOver2);
+								dataOut1.flush();
 							}
 						}
 					}
-
 					Thread.sleep(10);
 				}
 			} catch (Exception ex) {
