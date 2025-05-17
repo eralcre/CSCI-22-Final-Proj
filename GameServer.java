@@ -77,7 +77,6 @@ public class GameServer {
 		public GameSession (Socket p1, Socket p2){
 			p1Socket = p1;
 			p2Socket = p2;
-            gameWin = false;
         
 			try{
 				dataIn1 = new DataInputStream(p1Socket.getInputStream());
