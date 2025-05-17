@@ -1,3 +1,17 @@
+/**
+This is the GameStarter class. It handles client-side connection to the game server and player synchronization.
+@author Edward Francis S. Ibera (242267) & Erin Clare G. Maranan (242916)
+@version 19 May 2025
+We have not discussed the Java language code in our program
+with anyone other than our instructor or the teaching assistants
+assigned to this course.
+We have not used Java language code obtained from another student,
+or any other unauthorized source, either modified or unmodified.
+If any Java language code or documentation used in our program
+was obtained from another source, such as a textbook or website,
+that has been clearly noted with a proper citation in the comments
+of our program.
+**/
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -9,10 +23,16 @@ public class GameStarter {
     private DataInputStream dataIn;
     private DataOutputStream dataOut;
 
+    /**
+     * This Constructor creates a new GameStarter object
+     */
     public GameStarter(){
         playerInput = new Scanner(System.in);
     }
 
+    /**
+     * connects player to the game server using user-provided IP and port
+     */
     public void ConnectToGameServer(){
         try{
             System.out.print("Please input the server's IP Address: ");
@@ -28,7 +48,10 @@ public class GameStarter {
             System.out.println("IOException from ConnectToServer() method.");
         }
     }
-
+	
+    /**
+     * waits for the other player to connect
+     */
     public void waitForOtherPlayer(){
         try{
 			System.out.println("WAITING FOR OTHER PLAYER...");
@@ -40,24 +63,36 @@ public class GameStarter {
         }
     }
 
+	 /**
+	 * notifies the server when the player is ready
+	 * handles the server's response to begin gameplay
+	 */
 	public void notifyPlayerReady() {
 		try {
-			if (gameStart.isPlayerReady()) {
-				dataOut.writeUTF("PLAYER_READY");
+			if (gameStart.isPlayerReady()) { // check if this GameCanvas' 'playerReady' is true through the GameFrame
+				dataOut.writeUTF("PLAYER_READY"); // send "PLAYER_READY" to server
 				dataOut.flush();
-
-				String response = dataIn.readUTF();
+				
+				String response = dataIn.readUTF(); // wait for server's START_GAME response
 				if (response.equals("START_GAME")) {
-					gameStart.startGameFromServer();
-					dataOut.writeInt(gameStart.updateGameLevel());
-					startSync();
+					gameStart.startGameFromServer(); // start game
+					dataOut.writeInt(gameStart.updateGameLevel()); // send initial level to server to begin level synchronization
+					startSync(); // start the syncing of the player's elements
 				}
 			}
 		} catch (IOException e) {
 			System.out.println("IOException from notifyPlayerReady() method.");
 		}
 	}
-	
+
+    // Source: "Sending coordinates between 2 players over a network in Java - PART 02" by choobtorials
+    // URL: https://www.youtube.com/watch?v=yKrd7ddrjyc
+    // Accessed: May 7, 2025
+    // Note: Used for player ready, level, player position, boss HP, and game over state syncing
+    /**
+     * thread that constantly checks the GameFrame's playerReady() method
+	 * If true, then it calls the notifyPlayerReady()
+     */
 	public void waitForPlayerReady() {
 		new Thread(() -> {
 			try {
@@ -74,6 +109,12 @@ public class GameStarter {
 		}).start();
 	}
 
+    /**
+     * starts synchronization of game state between players
+	 * if level is less than 3 then the only syncing it does is the syncing of levels
+	 * if the level becomes 3 (final level), it stops syncing the level and focuses on syncing the player's positions, boss HPs, and game over states
+	 * only gets called when players are both ready (notifyPlayerReady())
+     */
 	public void startSync() {
 		new Thread(() -> {
 			try {
@@ -131,6 +172,9 @@ public class GameStarter {
 		}).start();
 	}
 
+    /**
+     * ensures sockets are closed when the program shuts down
+     */
     public void closeSocketOnShutdown(){
         Runtime.getRuntime().addShutdownHook(new Thread(()->{
             try{
@@ -141,6 +185,10 @@ public class GameStarter {
         }));
     }
 
+    /**
+     * main method to start the client
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         GameStarter cc = new GameStarter();
         cc.closeSocketOnShutdown();
