@@ -22,15 +22,23 @@ public class Attack{
         attackY = playerY-40;
     }
 
-    public void drawAttack(Graphics2D g2d){
-        attack1 = new Ellipse2D.Double(attackX,attackY,size1,size1);
-        attack2 = new Ellipse2D.Double(attackX-5,attackY-5,size2,size2);
-        attack3 = new Ellipse2D.Double(attackX-10,attackY-10,size3,size3);
-    }
+	public void drawAttack(Graphics2D g2d){
+		attack1 = new Ellipse2D.Double(attackX,attackY,size1,size1);
+		attack2 = new Ellipse2D.Double(attackX-5,attackY-5,size2,size2);
+		attack3 = new Ellipse2D.Double(attackX-10,attackY-10,size3,size3);
+		
+		g2d.setColor(color2);
+		g2d.fill(attack3);
+		g2d.fill(attack2);
+		g2d.setColor(color1);
+		g2d.fill(attack1);
+	}
 
     public void moveAttack(){
-        attackY -= 5;
+        attackY -= 10;
     }
-
-   
+	
+	public int getAttackY() {
+		return attackY;
+	}
 }

@@ -27,6 +27,10 @@ public class Monster{
         sideR = new ImageIcon("Monster/sideR.png").getImage();
         sideL = new ImageIcon("Monster/sideL.png").getImage();
 
+        // Asset: Health Bar by DanoPix
+        // URL: https://danopix.itch.io/health-bar-by-dano
+        // Accessed: May 16, 2025
+        // Note: Used for the images below
         healthbar = new ImageIcon("Monster/healthBar.png").getImage();
         health = new ImageIcon("Monster/100H.png").getImage();
     }
@@ -39,10 +43,10 @@ public class Monster{
         centerEye = new Ellipse2D.Double(x+468, y+177, 90, 90);
         g2d.setColor(eyeColor);
         g2d.fill(centerEye);
-        g2d.drawImage(sideR, x+638, y+130, null);
-        g2d.drawImage(sideL, x+513, y+130, null);
+        g2d.drawImage(sideR, x+513, y+130, null);
+        g2d.drawImage(sideL, x+388, y+130, null);
 
-        smallEye1 = new Ellipse2D.Double(x+467, y+142, 24, 44);
+        smallEye1 = new Ellipse2D.Double(x+476, y+142, 24, 44);
         smallEye2 = new Ellipse2D.Double(x+499, y+130, 28, 50);
         smallEye3 = new Ellipse2D.Double(x+526, y+142, 24, 44);
         g2d.setColor(eyeColor2);
@@ -102,6 +106,10 @@ public class Monster{
     }
 
     public void updateHealth(int hp){
+        // Asset: Health Bar by DanoPix
+        // URL: https://danopix.itch.io/health-bar-by-dano
+        // Accessed: May 16, 2025
+        // Note: Used for the images below
         switch (hp) {
             case 80:
                 health = new ImageIcon("Monster/80H.png").getImage();

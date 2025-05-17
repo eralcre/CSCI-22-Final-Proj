@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class GameCanvas extends JComponent {
     private String playerNumber;
@@ -23,20 +24,20 @@ public class GameCanvas extends JComponent {
 	private boolean playerIsReady;
 	private boolean startButtonClicked;
 
+	private boolean bossRoomEntered = false;
+	private boolean bossIsHit = false;	
 	private boolean bossDefeated = false;
 	private boolean upPressed = false;
 	private boolean downPressed = false;
 	private boolean leftPressed = false;
 	private boolean rightPressed = false;
-	private boolean pPressed = false;
+	private boolean shouldSendAttack = false;
 
 	private Attack playerAttack;
-	private boolean playerAttacks;
-
+	private ArrayList<TimedAttack> activeAttacks = new ArrayList<>();
+	private Health playerLife = new Health();
 	private Monster monster;
 	private boolean monsterAttacks;
-
-	private Health playerLife;
 
     public GameCanvas(String playerNumber) {
         this.playerNumber = playerNumber;
@@ -45,7 +46,6 @@ public class GameCanvas extends JComponent {
         hintClickCount = 0;
         clueFound = false;
         clueIsClicked = false;
-		playerAttacks = false;
 		monsterAttacks = false;
         startScreen = new Start();
         GOScreen = new GameOver();
@@ -62,12 +62,14 @@ public class GameCanvas extends JComponent {
             gameStat = new Status(playerNumber);
             hint = new Hint();
             clue = new Clue();
+			playerAttack = new Attack(player.getX(), player.getY(), player.getWidth());
         } else if (playerNumber.equals("Player 2")) {
             player = new Player2(472, 639, 100, 100);
             room = new MazeRoom();
             gameStat = new Status(playerNumber);
             hint = new Hint();
             clue = new Clue();
+			playerAttack = new Attack(player.getX(), player.getY(), player.getWidth());
         }
         gameStarted = false;
         gameOver = false;
@@ -81,12 +83,13 @@ public class GameCanvas extends JComponent {
 		doorBounds = new Rectangle(461, 46, 104, 146);
 
 		if (playerNumber.equals("Player 1")) {
-			if (gameStat.getLevel() == 3) {
+			if (gameStat.getLevel() == 3 && !bossRoomEntered) {
 				room = new BossRoom();
-				monster = new Monster();
-				playerLife = new Health();
 				player.setPosition(300, 639);
 				gameStat.setTimer(0, 2, 0, 0);
+				bossRoomEntered = true;
+				monster = new Monster();
+				monsterTimerA.start();
 				repaint();
 			}
 		}
@@ -102,10 +105,11 @@ public class GameCanvas extends JComponent {
 						break;
 					case 3:
 						room = new BossRoom();
-						monster = new Monster();
-						playerLife = new Health();
 						player.setPosition(600, 639);
+						bossRoomEntered = true;
 						gameStat.setTimer(0, 2, 0, 0);
+						monster = new Monster();
+						monsterTimerA.start();
 						repaint();
 						break;
 					default:
@@ -145,7 +149,6 @@ public class GameCanvas extends JComponent {
 		im.put(KeyStroke.getKeyStroke("released D"), "released right");
 		
 		im.put(KeyStroke.getKeyStroke("pressed P"), "pressed P");
-		im.put(KeyStroke.getKeyStroke("released P"), "released P");
 
 		am.put("pressed up", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) { upPressed = true; }
@@ -177,22 +180,15 @@ public class GameCanvas extends JComponent {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (gameStat.getLevel() == 3) {
-					 pPressed = true; 
-				}
-			}
-		});
-		am.put("released P", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (gameStat.getLevel() == 3) {
-					 pPressed = false; 
+					spawnAttack();
+					repaint(); 
 				}
 			}
 		});
 	}
 
-	public void setUpActions() {
-		animationTimer = new Timer(16, new ActionListener() {
+	public void setUpMoveActions() {
+		animationTimer = new javax.swing.Timer(32, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				boolean moved = false;
 
@@ -374,6 +370,7 @@ public class GameCanvas extends JComponent {
 				}
 				if (count==35){
 					monster.monsterAttacks(false);
+					count = 0;
 				}
 				repaint();
 				count++;
@@ -390,6 +387,7 @@ public class GameCanvas extends JComponent {
 				}
 				if (count==35){
 					monster.monsterAttacks(false);
+					count = 0;
 				}
 				repaint();
 				count++;
@@ -399,34 +397,36 @@ public class GameCanvas extends JComponent {
 
 		ActionListener monsterTimerListenerA = new ActionListener() {
 			int count = 0;
-			int trigger = (int)(Math.random()*10);
+			int triggerL = 5;
+			int triggerR = 20;
+			int limit1 = 15;
+			int limit2 = 40;
 			boolean mtLisMoving = false;
 			boolean mtRisMoving = false;
 			public void actionPerformed(ActionEvent ae){
-				if(count == trigger){
-					if(count%2==0){
-						monsterTimerL.start();
-						mtLisMoving = true;
-					}
-					else{
-						monsterTimerR.start();
-						mtRisMoving = true;
-					}
+				if(count == triggerL){
+					monsterTimerL.start();
+					mtLisMoving = true;
+				}
+				else if(count == triggerR){
+					monsterTimerR.start();
+					mtRisMoving = true;
 				}
 				
-				if(count==15 && mtLisMoving){
+				if(count==limit1 && mtLisMoving){
 					monsterTimerL.stop();
 					mtLisMoving = false;
-					trigger = (int)(Math.random()*10);
-					count = 0;
 				}
-				else if(count == 15 && mtRisMoving){
+				else if(count == limit2 && mtRisMoving){
 					monsterTimerR.stop();
 					mtRisMoving = false;
-					trigger = (int)(Math.random()*10);
+					if(limit2 == 40){
+						limit1 = 25;
+						triggerR = 25;
+						limit2 = 50;
+					}
 					count = 0;
 				}
-
 				count++;
 			}
 		};
@@ -449,21 +449,7 @@ public class GameCanvas extends JComponent {
 		};
 		this.addMouseListener(ma);
 	}
-
-    private void setUpGameOverMouseClicked(){
-        MouseAdapter ma = new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				Point p = e.getPoint();
-				if ((GOScreen.restartButtonArea()!=null) && (GOScreen.restartButtonArea().contains(p))) {
-                    gameStart();
-					repaint();
-				}
-			}
-		};
-		this.addMouseListener(ma);
-    }
-
+	
     private void setUpHintMouseClicked() {
         MouseAdapter ma = new MouseAdapter() {
             @Override
@@ -521,6 +507,15 @@ public class GameCanvas extends JComponent {
 		};
 		this.addMouseListener(ma);
 	}
+	
+	private void setUpHealthLoss(){
+		//if (gameStat.g	qetLevel() == 3  && bossRoomEntered && !bossDefeated){
+				//if(){
+				//	playerLife.lossLife();
+				//	repaint();
+				//}
+		//}
+	}
 
     public int getLevel() {
         return gameStat.getLevel();
@@ -539,11 +534,11 @@ public class GameCanvas extends JComponent {
         gameStarted = true;
         levelTimer.start();
 		setupKeyBindings();
-		setUpActions();
-		setUpGameOverMouseClicked();
+		setUpMoveActions();
         setUpHintMouseClicked();
         setUpClueMouseClicked();
 		setUpPatternMouseClicked();
+		setUpHealthLoss();
 		repaint();
     }
 
@@ -559,6 +554,66 @@ public class GameCanvas extends JComponent {
 		return player.getY();
 	}
 
+	private class TimedAttack {
+		Attack attack;
+		Timer timer;
+
+		TimedAttack(Attack attack, Timer timer) {
+			this.attack = attack;
+			this.timer = timer;
+		}
+	}
+
+	public boolean shouldSendAttack() {
+		boolean result = shouldSendAttack;
+		shouldSendAttack = false;
+		return result;
+	}
+
+	public void spawnOtherPlayerAttack(int x, int y) {
+		Attack otherAttack = new Attack(x, y, 100);
+		Timer attackTimer = new Timer(5, e -> {
+			if (otherAttack.getAttackY() > 0) {
+				otherAttack.moveAttack();
+				repaint();
+			} else {
+				((Timer)e.getSource()).stop();
+				removeAttack(otherAttack);
+			}
+		});
+		activeAttacks.add(new TimedAttack(otherAttack, attackTimer));
+		attackTimer.start();
+	}
+
+	private void spawnAttack() {
+		if (gameStat.getLevel() != 3) return;
+		
+		Attack newAttack = new Attack(player.getX(), player.getY(), player.getWidth());
+		shouldSendAttack = true;
+		
+		Timer attackTimer = new Timer(5, e -> {
+			if (newAttack.getAttackY() > 0 && !bossIsHit) {
+				newAttack.moveAttack();
+				repaint();
+			} else {
+				((Timer)e.getSource()).stop();
+				removeAttack(newAttack);
+			}
+		});
+
+		activeAttacks.add(new TimedAttack(newAttack, attackTimer));
+		attackTimer.start();
+	}
+	
+	private void removeAttack(Attack attack) {
+		for (int i = 0; i < activeAttacks.size(); i++) {
+			if (activeAttacks.get(i).attack == attack) {
+				activeAttacks.remove(i);
+				break;
+			}
+		}
+	}	
+
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -572,18 +627,24 @@ public class GameCanvas extends JComponent {
 		if (showOtherPlayer && otherPlayer != null && gameStat.getLevel() == 3) {
             otherPlayer.draw(g);
         }
+		
+		for (TimedAttack ta : activeAttacks) {
+			ta.attack.drawAttack(g2d);
+		}
+		
+		if (gameStat.getLevel() == 3  && bossRoomEntered){
+			playerLife.draw(g2d);
+			monster.drawMonster(g2d);
+		}
+		
         gameStat.draw(g2d);
         hint.drawHintIcon(g2d);
-		
-		if (gameStat.getLevel()==3) {
-			monster.drawMonster(g2d);
-			playerLife.draw(g2d);
-		}
 
-        if (playerAttacks) {
-			playerAttack.drawAttack(g2d);
-		}
-		
+        if (gameStarted==false){
+            startScreen.drawStartScreen(g2d);
+            startScreen.drawStartButton(g2d, startButtonClicked);
+        }
+
         if (hintIsClicked) {
             hint.drawHintBox(g2d, getLevel(), playerNumber);
         }
@@ -595,14 +656,10 @@ public class GameCanvas extends JComponent {
             clue.drawX(g2d);
         }
 		
-		if (gameStarted==false) {
-            startScreen.drawStartScreen(g2d);
-            startScreen.drawStartButton(g2d, startButtonClicked);
-        }
 		
-		if (gameOver) {
+		
+		if (gameOver){
             GOScreen.drawGameOverScreen(g2d);
-            GOScreen.drawRestartButton(g2d);
         }
     }
 }
