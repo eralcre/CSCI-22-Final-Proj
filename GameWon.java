@@ -32,14 +32,15 @@ public class GameWon{
     /**
      * draws the game won screen
      */
-    public void drawGameOverScreen(Graphics2D g2d){ 
+    public void drawGameWonScreen(Graphics2D g2d){ 
         gameOverScreen = new Rectangle2D.Double(0, 0, 1024, 768);
         g2d.setColor(bgColor);
-        g2d.fill(gameOverScreen);
+        g2d.fill(gameOverScreen);      
         // Source: Oracle, "Drawing an Image", The Java™ Tutorials
         // URL: https://docs.oracle.com/javase/tutorial/2d/images/drawimage.html
         // Accessed: May 16, 2025
-        // Note: Adapted from official Oracle Java 2D tutorial      
+        // Note: Adapted from official Oracle Java 2D tutorial 
         g2d.drawImage(gameOver, 239, 200, null);
     }
+             
 }
