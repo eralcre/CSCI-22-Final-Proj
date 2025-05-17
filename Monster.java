@@ -29,6 +29,10 @@ public class Monster {
         sideR = new ImageIcon("Monster/sideR.png").getImage();
         sideL = new ImageIcon("Monster/sideL.png").getImage();
 
+        // Asset: Health Bar by DanoPix
+        // URL: https://danopix.itch.io/health-bar-by-dano
+        // Accessed: May 16, 2025
+        // Note: Used for the images below
         healthbar = new ImageIcon("Monster/healthBar.png").getImage();
         health = new ImageIcon("Monster/100H.png").getImage();
 
@@ -135,8 +139,12 @@ public class Monster {
         }
     }
 
-    public void updateHealth(int hp) {
-		currentHp = hp;
+    public void updateHealth(int hp){
+        currentHp = hp;
+        // Asset: Health Bar by DanoPix
+        // URL: https://danopix.itch.io/health-bar-by-dano
+        // Accessed: May 16, 2025
+        // Note: Used for the images below
         switch (hp) {
             case 80:
                 health = new ImageIcon("Monster/80H.png").getImage();

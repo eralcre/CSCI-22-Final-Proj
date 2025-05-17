@@ -21,6 +21,7 @@ public class GameCanvas extends JComponent {
     private Rectangle nextPlayerBounds, doorBounds;
     private Clue clue;
     private int clueBoundsIndex;
+
     private Timer animationTimer, levelTimer, attackTimer, monsterTimerL, monsterTimerR, monsterTimerA, gracePeriodTimer;
     private boolean playerIsReady;
     private boolean startButtonClicked;
@@ -450,6 +451,7 @@ public class GameCanvas extends JComponent {
         this.addMouseListener(ma);
     }
 
+
     private void setUpHintMouseClicked() {
         MouseAdapter ma = new MouseAdapter() {
             @Override
@@ -642,8 +644,6 @@ public class GameCanvas extends JComponent {
             }
         }
 
-        
-
         if (gameStat.getLevel() == 3 && bossRoomEntered && !bossDefeated) {
             playerLife.draw(g2d);
             if (!(monster.getCurrentHp() == 0)) monster.drawMonster(g2d);
@@ -679,6 +679,7 @@ public class GameCanvas extends JComponent {
         }
         
         hint.drawHintIcon(g2d);
+
         if (hintIsClicked) {
             hint.drawHintBox(g2d, getLevel(), playerNumber);
         }

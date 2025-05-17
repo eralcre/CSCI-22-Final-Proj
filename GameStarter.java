@@ -121,6 +121,11 @@ public class GameStarter {
 									gameStart.updateGameOver(true);
 								}
 							}
+							else if (msg.equals("ATTACK")) {
+								int x = dataIn.readInt();
+								int y = dataIn.readInt();
+								gameStart.spawnOtherPlayerAttack(x, y);
+							}
 						}
 					}
 					Thread.sleep(100);
