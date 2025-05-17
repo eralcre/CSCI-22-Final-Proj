@@ -97,10 +97,6 @@ public class GameServer {
 			t.	start();
 		}
 		
-		// Source: "Sending coordinates between 2 players over a network in Java - PART 02" by choobtorials
-		// URL: https://www.youtube.com/watch?v=yKrd7ddrjyc
-		// Accessed: May 7, 2025
-		// Note: Used for player ready, level, player position, boss HP, and game over state syncing
         /**
          * runs the main game session logic
          */
@@ -156,6 +152,10 @@ public class GameServer {
 					// syncing for the boss battle / level 3
 					// only starts at level 3 since position sync, boss hp sync, game over state sync, is only needed in level 3
 					if (syncedLevel == 3) {
+						// Source: Vivien Barousse' answer to "What does InputStream.available() do in Java?" in StackOverflow
+						// URL: https://stackoverflow.com/questions/3695372/what-does-inputstream-available-do-in-java
+						// Accessed: May 10, 2025
+						// Note: Used to know how dataIn.available() works.
 						while (dataIn1.available() > 0) { // Player 1's data to Player 2
 							String msgType = dataIn1.readUTF();
 							if (msgType.equals("POSITION")) { // position sync

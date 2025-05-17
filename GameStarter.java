@@ -85,10 +85,6 @@ public class GameStarter {
 		}
 	}
 
-    // Source: "Sending coordinates between 2 players over a network in Java - PART 02" by choobtorials
-    // URL: https://www.youtube.com/watch?v=yKrd7ddrjyc
-    // Accessed: May 7, 2025
-    // Note: Used for player ready, level, player position, boss HP, and game over state syncing
     /**
      * thread that constantly checks the GameFrame's playerReady() method
 	 * If true, then it calls the notifyPlayerReady()
@@ -142,6 +138,10 @@ public class GameStarter {
 						dataOut.writeBoolean(gameStart.isGameOver());
 						dataOut.flush();
 
+						// Source: Vivien Barousse' answer to "What does InputStream.available() do in Java?" in StackOverflow
+						// URL: https://stackoverflow.com/questions/3695372/what-does-inputstream-available-do-in-java
+						// Accessed: May 10, 2025
+						// Note: Used to know how dataIn.available() works.
 						while (dataIn.available() > 0) {
 							String msgType = dataIn.readUTF();
 							if (msgType.equals("POSITION")) {

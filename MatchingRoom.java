@@ -49,21 +49,21 @@ public class MatchingRoom extends JComponent implements Room {
         door = new ImageIcon("MatchingRoom/Door.png").getImage();
 		fence = new ImageIcon("MatchingRoom/Fence.png").getImage();
 
-        // Source: Eye vector illustration. Cartoon eye. Eye hand draw isolated. by FREEPIK
+        // Source: Eye Images from FREEPIK
         // URL: https://www.freepik.com/premium-vector/eye-vector-illustration-cartoon-eye-eye-hand-draw-isolated_36994707.htm
         // Accessed: May 7, 2025
         // Note: Used for the eyes beside the door. 
 		
-        // Source: "Replacement of a certain color in the image to the specified color online" by IMGonline.com
+        // Source: "Replace color in image online" by IMGonline.com
         // URL: https://www.imgonline.com.ua/eng/replace-color.php
         // Accessed: May 7, 2025
-        // Note: Used to change the color of the eye to red or green since blue was the only color of the eye in the source
+        // Note: Used to change the color of the eye from bleu to red or green since blue was the only color of the eye in the source
 
         eyeImages[0] = new ImageIcon("MatchingRoom/RedEye.png").getImage();
         eyeImages[1] = new ImageIcon("MatchingRoom/GreenEye.png").getImage();
         eyeImages[2] = new ImageIcon("MatchingRoom/BlueEye.png").getImage();
 
-        // Source: Package box symbols set by FREEPIK
+        // Source: Pattern Images from FREEPIK
         // URL: https://www.freepik.com/free-vector/package-box-symbols-set_9650604.htm#fromView=keyword&page=1&position=0&uuid=7b9c8d35-7940-46bd-9ba0-53009bbbb19a&query=Symbol
         // Accessed: May 7, 2025
         // Note: Used for the patterns on the floor
@@ -272,6 +272,10 @@ public class MatchingRoom extends JComponent implements Room {
 				puzzleSolved = true;
 				createObjectBounds();
 			} else {
+				// Source: Oracle, "How to Use Swing Timers", The Java™ Tutorials
+				// URL: https://docs.oracle.com/javase/tutorial/uiswing/misc/timer.html#:~:text=If%20you%20want%20the%20timer,in%20the%20event%20dispatch%20thread.
+				// Accessed: May 15, 2025
+				// Note: Used to know how to make a timer only run once (setRepeats(false)).
 				Timer timer = new Timer(1000, e -> {
 					selectedPatterns[0] = -1;
 					selectedPatterns[1] = -1;

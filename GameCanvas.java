@@ -226,7 +226,7 @@ public class GameCanvas extends JComponent {
      * sets up the timer for player movement and animation updates.
      */
     public void setUpMoveActions() {
-        animationTimer = new javax.swing.Timer(32, new ActionListener() {
+        animationTimer = new Timer (32, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 boolean moved = false;
 
@@ -760,6 +760,10 @@ public class GameCanvas extends JComponent {
                 player.getWidth(), player.getHeight()
             );
 
+			// Source: Oracle, "How to Use Swing Timers", The Java™ Tutorials
+			// URL: https://docs.oracle.com/javase/tutorial/uiswing/misc/timer.html#:~:text=If%20you%20want%20the%20timer,in%20the%20event%20dispatch%20thread.
+			// Accessed: May 15, 2025
+			// Note: Used to know how to make a timer only run once (setRepeats(false)).
             if (playerLife.getLifeCount() > 0 && canTakeDamage) {
                 for (Shape attack : monster.getMonsterAttackHitbox()) {
                     if (attack != null && playerBounds.intersects(attack.getBounds2D())) {
