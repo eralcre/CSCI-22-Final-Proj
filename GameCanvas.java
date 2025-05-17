@@ -110,7 +110,6 @@ public class GameCanvas extends JComponent {
                         room = new BossRoom();
                         player.setPosition(600, 639);
                         bossRoomEntered = true;
-                        gameStat.setTimer(0, 2, 0, 0);
                         monster = new Monster();
                         monsterTimerA.start();
                         repaint();
@@ -643,20 +642,7 @@ public class GameCanvas extends JComponent {
             }
         }
 
-        gameStat.draw(g2d);
-        hint.drawHintIcon(g2d);
-
-        if (gameStarted == false) {
-            startScreen.drawStartScreen(g2d);
-            startScreen.drawStartButton(g2d, startButtonClicked);
-        }
-
-        if (hintIsClicked) {
-            hint.drawHintBox(g2d, getLevel(), playerNumber);
-        }
-        if (clueFound) {
-            clue.drawClueIcon(g2d, player.getX(), player.getY());
-        }
+        
 
         if (gameStat.getLevel() == 3 && bossRoomEntered && !bossDefeated) {
             playerLife.draw(g2d);
@@ -691,10 +677,27 @@ public class GameCanvas extends JComponent {
                 }
             }
         }
+        
+        hint.drawHintIcon(g2d);
+        if (hintIsClicked) {
+            hint.drawHintBox(g2d, getLevel(), playerNumber);
+        }
 
+        if (clueFound) {
+            clue.drawClueIcon(g2d, player.getX(), player.getY());
+        }
+        
         if (clueIsClicked) {
             clue.drawClueBox(g2d, clueBoundsIndex);
             clue.drawX(g2d);
+        }
+        
+        gameStat.draw(g2d);
+        
+
+        if (gameStarted == false) {
+            startScreen.drawStartScreen(g2d);
+            startScreen.drawStartButton(g2d, startButtonClicked);
         }
 
         if (gameOver) {
@@ -704,6 +707,7 @@ public class GameCanvas extends JComponent {
         if (gameStat.getLevel() == 3) {
             if (bossDefeated || (monster != null && monster.getCurrentHp() <= 0)) {
                 GWScreen.drawGameWonScreen(g2d);
+                levelTimer.stop();
             }
         }
     }
