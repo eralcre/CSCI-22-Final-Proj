@@ -1,20 +1,22 @@
 import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.*;
+import java.util.ArrayList;
 
-public class Monster{
+public class Monster {
     private Color mainColor, highlight, shadow, eyeColor, eyeColor2, effectColor;
-    private int x, y;
+    private int x, y, currentHp, healthXChange, healthYChange;
     private Image sideR, sideL, healthbar, health;
-    private Ellipse2D.Double mShadow, centerEye, smallEye1, smallEye2, smallEye3;
+    private Ellipse2D.Double mShadow, centerEye, smallEye1, smallEye2, smallEye3, monsterHitbox;
     private boolean mAttack;
     private Rectangle2D.Double attack1, attack2;
     private Ellipse2D.Double effect1, effect2, eyeEffect;
+    private ArrayList<Shape> monsterAttackBounds;
 
-    public Monster(){
+    public Monster() {
         x = 0;
         y = 0;
-        
+
         mAttack = false;
 
         mainColor = new Color(22, 20, 20);
@@ -33,6 +35,12 @@ public class Monster{
         // Note: Used for the images below
         healthbar = new ImageIcon("Monster/healthBar.png").getImage();
         health = new ImageIcon("Monster/100H.png").getImage();
+
+        monsterAttackBounds = new ArrayList<>();
+        monsterHitbox = new Ellipse2D.Double(x + 383, y + 114, 257, 186);
+		currentHp = 100;
+        healthXChange = 0;
+        healthYChange = 0;
     }
 
     public void drawMonster(Graphics2D g2d){
@@ -74,8 +82,34 @@ public class Monster{
         g2d.fill(smallEye2);
         g2d.fill(smallEye3);
 
-        g2d.drawImage(health, x+355, y+68, null);
-        g2d.drawImage(healthbar, x+349, y+49, null);
+        int healthX = x + 355 + healthXChange;
+        int healthY = y + 68 + healthYChange;
+
+        switch (currentHp) {
+            case 80:
+                healthYChange =  59 - 68;
+                break;
+            case 60:
+                healthXChange =  345 - 355;
+                healthYChange =  49 - 68;
+                break;
+            case 40:
+                healthXChange =  353 - 355;
+                healthYChange =  61 - 68;
+                break;
+            case 20:
+                healthXChange =  332 - 355;
+                healthYChange =  54 - 68;
+                break;
+            case 0:
+                healthXChange =  343 - 355;
+                healthYChange =  49 - 68;
+                break;
+            default:
+                break;
+        }
+        g2d.drawImage(health, healthX, healthY, null);
+        g2d.drawImage(healthbar, x + 349, y + 49, null);
 
         g2d.setColor(new Color(240, 170, 235, 66));
         eyeEffect = new Ellipse2D.Double(x+407, y+218, 211, 7);
@@ -106,6 +140,7 @@ public class Monster{
     }
 
     public void updateHealth(int hp){
+        currentHp = hp;
         // Asset: Health Bar by DanoPix
         // URL: https://danopix.itch.io/health-bar-by-dano
         // Accessed: May 16, 2025
@@ -131,11 +166,11 @@ public class Monster{
         }
     }
 
-    public void monsterAttacks(boolean a){
+    public void monsterAttacks(boolean a) {
         mAttack = a;
     }
 
-    public void moveMonster(String direction){
+    public void moveMonster(String direction) {
         switch (direction) {
             case "left":
                 x -= 5;
@@ -146,5 +181,29 @@ public class Monster{
             default:
                 throw new AssertionError();
         }
+
+        monsterHitbox.x = x + 383;
+        monsterHitbox.y = y + 114;
     }
+
+    public ArrayList<Shape> getMonsterAttackHitbox() {
+        monsterAttackBounds.clear();
+
+        if (mAttack) {
+            monsterAttackBounds.add(attack1);
+            monsterAttackBounds.add(attack2);
+            monsterAttackBounds.add(effect1);
+            monsterAttackBounds.add(effect2);
+        }
+
+        return monsterAttackBounds;
+    }
+
+    public Ellipse2D.Double getMonsterHitbox() {
+        return monsterHitbox;
+    }
+	
+	public int getCurrentHp(){
+		return currentHp;
+	}
 }

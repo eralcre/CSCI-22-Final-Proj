@@ -47,12 +47,20 @@ public class GameFrame {
     public void updateOtherPlayerPosition(int x, int y) {
         gc.updateOtherPlayerPosition(x, y);
     }
-
-	public void spawnOtherPlayerAttack(int x, int y) {
-		gc.spawnOtherPlayerAttack(x, y);
+	
+	public int getBossHp(){
+		return gc.getBossHp();
+	}
+	
+	public void updateBossHp(int hp){
+		gc.updateBossHp(hp);
 	}
 
-	public boolean shouldSendAttack() {
-		return gc.shouldSendAttack();
+    public boolean isGameOver() {
+        return gc.isGameOver();
+    }
+	
+	public void updateGameOver(boolean a){
+		gc.updateGameOver(a);
 	}
 }

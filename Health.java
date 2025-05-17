@@ -61,11 +61,11 @@ public class Health{
             life1 = new ImageIcon("BossRoom/Heart2.png").getImage();
         }
     }
-	
+
     /**
      * returns the lifeCount, which represents the remaining lives of the player
      */
-	public int getLifeCount(){
-		return lifeCount;
-	}
+    public int getLifeCount(){
+      return lifeCount;
+    }
 }

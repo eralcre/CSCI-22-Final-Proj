@@ -49,7 +49,6 @@ public class Hint{
         borderColor = new Color(79,29,20);
 
         hintIcon = new Rectangle2D.Double(942,12,50,50);
-        hint = new ImageIcon("Hints/sampleHint.png").getImage();
     }
 
     /**
@@ -105,7 +104,7 @@ public class Hint{
                     hint = new ImageIcon("Hints/Hint.png").getImage();
                     break;
                 case 3:
-                    hint = new ImageIcon("Hints/sampleHint.png").getImage();
+                    hint = new ImageIcon("Hints/Hint3.png").getImage();//battle instructions img
                     break;
                 default:
                     break;
@@ -120,7 +119,7 @@ public class Hint{
                     hint = new ImageIcon("Hints/Hint2.png").getImage();
                     break;
                 case 3:
-                    hint = new ImageIcon("Hints/sampleHint.png").getImage();
+                    hint = new ImageIcon("Hints/Hint3.png").getImage();//battle instructions img
                     break;
                 default:
                     break;

@@ -32,7 +32,7 @@ public class Player2 extends Player {
         this.y = y;
         width = w;
         height = h;
-        character = new ImageIcon("P2/Player2F.png").getImage();
+        character = new ImageIcon("P2/Player2B.png").getImage();
     }
 
     /**

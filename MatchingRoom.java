@@ -216,40 +216,41 @@ public class MatchingRoom extends JComponent implements Room {
     }
 	
 	public void patternClicked(int patternIndex) {
-        for (int i = 0; i < selectedCount; i++) {
-            if (selectedPatterns[i] == patternIndex) {
-                for (int j = i; j < selectedCount - 1; j++) {
-                    selectedPatterns[j] = selectedPatterns[j+1];
-                }
-                selectedPatterns[selectedCount-1] = -1;
-                selectedCount--;
-                repaint();
-                return;
-            }
-        }
+		for (int i = 0; i < selectedCount; i++) {
+			if (selectedPatterns[i] == patternIndex) {
+				for (int j = i; j < selectedCount - 1; j++) {
+					selectedPatterns[j] = selectedPatterns[j + 1];
+				}
+				selectedPatterns[selectedCount - 1] = -1;
+				selectedCount--;
+				repaint();
+				return;
+			}
+		}
 
-        if (selectedCount >= 2) return;
+		if (selectedCount >= 2) return;
 
-        selectedPatterns[selectedCount++] = patternIndex;
+		selectedPatterns[selectedCount++] = patternIndex;
 
-        if (selectedCount == 2) {
-            boolean isCorrect = (selectedPatterns[0] == correctPatterns[0] && selectedPatterns[1] == correctPatterns[1]) ||
-            (selectedPatterns[0] == correctPatterns[1] && selectedPatterns[1] == correctPatterns[0]);
-            
-            if (isCorrect) {
-                puzzleSolved = true;
-                createObjectBounds();
-            } else {
-				new Timer(1000, e -> {  
-					selectedPatterns[0] = -1; 
-					selectedPatterns[1] = -1;  
-					selectedCount = 0;        
-					repaint();                 
-				}).start();
-            }
-            repaint();
-        }
-    }
+		if (selectedCount == 2) {
+			boolean isCorrect = (selectedPatterns[0] == correctPatterns[0] && selectedPatterns[1] == correctPatterns[1]) ||
+								(selectedPatterns[0] == correctPatterns[1] && selectedPatterns[1] == correctPatterns[0]);
+
+			if (isCorrect) {
+				puzzleSolved = true;
+				createObjectBounds();
+			} else {
+				Timer timer = new Timer(1000, e -> {
+					selectedPatterns[0] = -1;
+					selectedPatterns[1] = -1;
+					selectedCount = 0;
+					repaint();
+				});
+				timer.setRepeats(false);
+				timer.start();
+			}
+		}
+	}
 	
 	private boolean isPatternSelected(int index) {
 		for (int i = 0; i < selectedCount; i++) {
