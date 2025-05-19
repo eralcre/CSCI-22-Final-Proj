@@ -31,7 +31,7 @@ public class GameFrame {
         frame = new JFrame();
         gc = new GameCanvas(playerNumber);
         gc.setPreferredSize(new Dimension(w, h));
-        frame.setTitle("Game Title");
+        frame.setTitle("The Wizard's Escape");
         frame.add(gc);
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

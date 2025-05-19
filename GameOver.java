@@ -25,7 +25,7 @@ public class GameOver{
      * This Constructor initializes the color and image that make up the game over screen.
      */
     public GameOver(){
-        bgColor = new Color(0,0,0,191);
+        bgColor = Color.BLACK;
         gameOver = new ImageIcon("GameOver/gameOver.png").getImage();
     }
 

@@ -25,7 +25,7 @@ public class GameWon{
      * This Constructor initializes the color and image that make up the game won screen.
      */
     public GameWon(){
-        bgColor = new Color(0,0,0,191);
+        bgColor = Color.BLACK;
         gameOver = new ImageIcon("GameWon/gameWon.png").getImage();
     }
 

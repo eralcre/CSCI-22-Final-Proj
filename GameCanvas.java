@@ -123,6 +123,10 @@ public class GameCanvas extends JComponent {
         }
 
         if (playerNumber.equals("Player 2")) {
+            // Source: Oracle, Java SE 7 API Documentation – java.awt.Shape
+            // URL: https://docs.oracle.com/javase/7/docs/api/java/awt/Shape.html
+            // Accessed: May 16, 2025
+            // Note: Used as reference for collisions/overlaps
             if (playerBounds.intersects(doorBounds)) {
                 gameStat.nextLevel();
                 int newLevel = gameStat.getLevel();
@@ -310,6 +314,10 @@ public class GameCanvas extends JComponent {
         int xOffset = (player.getWidth() - newWidth) / 2;
         nextPlayerBounds = new Rectangle(player.getX() + xOffset, player.getY() + 45, newWidth, 45);
         for (Shape x : room.getObjectBounds()) {
+            // Source: Oracle, Java SE 7 API Documentation – java.awt.Shape
+            // URL: https://docs.oracle.com/javase/7/docs/api/java/awt/Shape.html
+            // Accessed: May 16, 2025
+            // Note: Used as reference for collisions/overlaps
             if (x.intersects(nextPlayerBounds)) {
                 return false;
             }
@@ -325,6 +333,10 @@ public class GameCanvas extends JComponent {
         int xOffset = (player.getWidth() - newWidth) / 2;
         nextPlayerBounds = new Rectangle(player.getX() + xOffset, player.getY() + 65, newWidth, 45);
         for (Shape x : room.getObjectBounds()) {
+            // Source: Oracle, Java SE 7 API Documentation – java.awt.Shape
+            // URL: https://docs.oracle.com/javase/7/docs/api/java/awt/Shape.html
+            // Accessed: May 16, 2025
+            // Note: Used as reference for collisions/overlaps
             if (x.intersects(nextPlayerBounds)) {
                 return false;
             }
@@ -340,6 +352,10 @@ public class GameCanvas extends JComponent {
         int xOffset = (player.getWidth() - newWidth) / 2;
         nextPlayerBounds = new Rectangle(player.getX() - 10 + xOffset, player.getY() + 55, newWidth, 45);
         for (Shape x : room.getObjectBounds()) {
+            // Source: Oracle, Java SE 7 API Documentation – java.awt.Shape
+            // URL: https://docs.oracle.com/javase/7/docs/api/java/awt/Shape.html
+            // Accessed: May 16, 2025
+            // Note: Used as reference for collisions/overlaps
             if (x.intersects(nextPlayerBounds)) {
                 return false;
             }
@@ -355,6 +371,10 @@ public class GameCanvas extends JComponent {
         int xOffset = (player.getWidth() - newWidth) / 2;
         nextPlayerBounds = new Rectangle(player.getX() + 10 + xOffset, player.getY() + 55, newWidth, 45);
         for (Shape x : room.getObjectBounds()) {
+            // Source: Oracle, Java SE 7 API Documentation – java.awt.Shape
+            // URL: https://docs.oracle.com/javase/7/docs/api/java/awt/Shape.html
+            // Accessed: May 16, 2025
+            // Note: Used as reference for collisions/overlaps
             if (x.intersects(nextPlayerBounds)) {
                 return false;
             }
@@ -386,6 +406,10 @@ public class GameCanvas extends JComponent {
         }
 
         for (Shape obj : room.getOthrObjBounds()) {
+            // Source: Oracle, Java SE 7 API Documentation – java.awt.Shape
+            // URL: https://docs.oracle.com/javase/7/docs/api/java/awt/Shape.html
+            // Accessed: May 16, 2025
+            // Note: Used as reference for collisions/overlaps
             if (obj.intersects(nextPlayerBounds)) {
                 clueBoundsIndex = room.getOthrObjBounds().indexOf(obj);
                 return true;
@@ -484,7 +508,15 @@ public class GameCanvas extends JComponent {
      * sets up mouse listener for the start button
      */
     private void setUpStartMouseClicked() {
+        // Source: Oracle, Java SE 8 API Documentation – java.awt.event.MouseAdapter#mouseClicked
+        // URL: https://docs.oracle.com/javase/8/docs/api/java/awt/event/MouseAdapter.html#mouseClicked-java.awt.event.MouseEvent-
+        // Accessed: May 16, 2025
+        // Note: Used as reference for detecting mouse click
         MouseAdapter ma = new MouseAdapter() {
+            // Source: Oracle, Java SE 7 API Documentation – java.awt.event.MouseEvent
+            // URL: https://docs.oracle.com/javase/7/docs/api/java/awt/event/MouseEvent.html
+            // Accessed: May 16, 2025
+            // Note: Used as a reference for mouse event handling methods
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (gameStarted || startButtonClicked) return;
@@ -737,10 +769,14 @@ public class GameCanvas extends JComponent {
             ta.attack.drawAttack(g2d);
             if (gameStat.getLevel() == 3 && bossRoomEntered && !bossDefeated) {
                 Ellipse2D.Double bossHitbox = monster.getMonsterHitbox();
+                // Source: Oracle, Java SE 7 API Documentation – java.awt.Shape
+                // URL: https://docs.oracle.com/javase/7/docs/api/java/awt/Shape.html
+                // Accessed: May 16, 2025
+                // Note: Used as reference for collisions/overlaps
                 if (ta.attack.getAttackHitbox().getBounds2D().intersects(bossHitbox.getBounds2D())) {
                     ta.timer.stop();
                     activeAttacks.remove(ta);
-                    bossHp -= 2;
+                    bossHp -= 0.25;
                     monster.updateHealth(bossHp);
                     if (bossHp <= 0) {
                         bossDefeated = true;
@@ -766,6 +802,10 @@ public class GameCanvas extends JComponent {
 			// Note: Used to know how to make a timer only run once (setRepeats(false)).
             if (playerLife.getLifeCount() > 0 && canTakeDamage) {
                 for (Shape attack : monster.getMonsterAttackHitbox()) {
+                    // Source: Oracle, Java SE 7 API Documentation – java.awt.Shape
+                    // URL: https://docs.oracle.com/javase/7/docs/api/java/awt/Shape.html
+                    // Accessed: May 16, 2025
+                    // Note: Used as reference for collisions/overlaps
                     if (attack != null && playerBounds.intersects(attack.getBounds2D())) {
                         playerLife.lossLife();
 

@@ -101,8 +101,8 @@ public class GameServer {
          */
 		public void run() {
 			try {
-				dataOut1.writeUTF("HELLO! WELCOME TO [GAME NAME]! You are Player 1");
-				dataOut2.writeUTF("HELLO! WELCOME TO [GAME NAME]! You are Player 2");
+				dataOut1.writeUTF("HELLO! WELCOME TO THE WIZARD'S ESCAPE! You are Player 1");
+				dataOut2.writeUTF("HELLO! WELCOME TO THE WIZARD'S ESCAPE! You are Player 2");
 				dataOut1.writeUTF("Player 1");
 				dataOut2.writeUTF("Player 2");
 				System.out.println("2 players are in this game session.");
