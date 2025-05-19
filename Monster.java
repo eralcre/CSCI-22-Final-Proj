@@ -1,3 +1,17 @@
+/**
+This is the Monster class. It handles the creation, movement, attacks, and rendering of the monster in the Boss Room.
+@author Edward Francis S. Ibera (242267) & Erin Clare G. Maranan (242916)
+@version 19 May 2025
+We have not discussed the Java language code in our program
+with anyone other than our instructor or the teaching assistants
+assigned to this course.
+We have not used Java language code obtained from another student,
+or any other unauthorized source, either modified or unmodified.
+If any Java language code or documentation used in our program
+was obtained from another source, such as a textbook or website,
+that has been clearly noted with a proper citation in the comments
+of our program.
+**/
 import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.*;
@@ -13,6 +27,9 @@ public class Monster {
     private Ellipse2D.Double effect1, effect2, eyeEffect;
     private ArrayList<Shape> monsterAttackBounds;
 
+    /**
+     * This Constructor creates a new Monster object
+     */
     public Monster() {
         x = 0;
         y = 0;
@@ -43,6 +60,9 @@ public class Monster {
         healthYChange = 0;
     }
 
+    /**
+     * draws the monster on the screen
+     */
     public void drawMonster(Graphics2D g2d){
         mShadow = new Ellipse2D.Double(x+335, y+30, 356, 272);
         g2d.setColor(shadow);
@@ -139,6 +159,11 @@ public class Monster {
         }
     }
 
+    /**
+     * updates the monster's health
+	 * uses a different hp bar based on the current hp of the boss
+     * @param hp the new health value
+     */
     public void updateHealth(int hp){
         currentHp = hp;
         // Asset: Health Bar by DanoPix
@@ -166,10 +191,18 @@ public class Monster {
         }
     }
 
+    /**
+     * checks whether the monster is attacking
+     * @param a true if attacking, false otherwise
+     */
     public void monsterAttacks(boolean a) {
         mAttack = a;
     }
 
+    /**
+     * moves the monster towards a specified direction
+     * @param direction the direction to move ("left" or "right")
+     */
     public void moveMonster(String direction) {
         switch (direction) {
             case "left":
@@ -186,6 +219,9 @@ public class Monster {
         monsterHitbox.y = y + 114;
     }
 
+    /**
+     * returns monster's attack hitboxes
+     */
     public ArrayList<Shape> getMonsterAttackHitbox() {
         monsterAttackBounds.clear();
 
@@ -199,10 +235,16 @@ public class Monster {
         return monsterAttackBounds;
     }
 
+    /**
+     * returns the monster's body hitbox
+     */
     public Ellipse2D.Double getMonsterHitbox() {
         return monsterHitbox;
     }
-	
+
+    /**
+     * returns the monster's current health
+     */
 	public int getCurrentHp(){
 		return currentHp;
 	}

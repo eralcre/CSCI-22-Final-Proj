@@ -49,9 +49,24 @@ public class MatchingRoom extends JComponent implements Room {
         door = new ImageIcon("MatchingRoom/Door.png").getImage();
 		fence = new ImageIcon("MatchingRoom/Fence.png").getImage();
 
+        // Source: Eye Images from FREEPIK
+        // URL: https://www.freepik.com/premium-vector/eye-vector-illustration-cartoon-eye-eye-hand-draw-isolated_36994707.htm
+        // Accessed: May 7, 2025
+        // Note: Used for the eyes beside the door. 
+		
+        // Source: "Replace color in image online" by IMGonline.com
+        // URL: https://www.imgonline.com.ua/eng/replace-color.php
+        // Accessed: May 7, 2025
+        // Note: Used to change the color of the eye from bleu to red or green since blue was the only color of the eye in the source
+
         eyeImages[0] = new ImageIcon("MatchingRoom/RedEye.png").getImage();
         eyeImages[1] = new ImageIcon("MatchingRoom/GreenEye.png").getImage();
         eyeImages[2] = new ImageIcon("MatchingRoom/BlueEye.png").getImage();
+
+        // Source: Pattern Images from FREEPIK
+        // URL: https://www.freepik.com/free-vector/package-box-symbols-set_9650604.htm#fromView=keyword&page=1&position=0&uuid=7b9c8d35-7940-46bd-9ba0-53009bbbb19a&query=Symbol
+        // Accessed: May 7, 2025
+        // Note: Used for the patterns on the floor
 
         patternImages[0] = new ImageIcon("MatchingRoom/Pattern1.png").getImage();
         patternImages[1] = new ImageIcon("MatchingRoom/Pattern2.png").getImage();
@@ -61,7 +76,6 @@ public class MatchingRoom extends JComponent implements Room {
         patternImages[5] = new ImageIcon("MatchingRoom/Pattern6.png").getImage();
         patternImages[6] = new ImageIcon("MatchingRoom/Pattern7.png").getImage();
         patternImages[7] = new ImageIcon("MatchingRoom/Pattern8.png").getImage();
-
         patternClickImages[0] = new ImageIcon("MatchingRoom/Pattern1Click.png").getImage();
         patternClickImages[1] = new ImageIcon("MatchingRoom/Pattern2Click.png").getImage();
         patternClickImages[2] = new ImageIcon("MatchingRoom/Pattern3Click.png").getImage();
@@ -193,12 +207,21 @@ public class MatchingRoom extends JComponent implements Room {
 		return new ArrayList<>();
 	}
 
+    /**
+     * gets called when the puzzle is solved
+     * recalls the createObjectBounds() method to remove the bounds of the fence
+	 * @param solved boolean that declares the puzzleSolved true
+     */
 	public void puzzleSolved(boolean solved) {
 		this.puzzleSolved = solved;
 		createObjectBounds();
 		repaint();
 	}
-
+	
+	 /**
+     * assigned the color of each eye randomly
+	 * sets up the specific two patterns (based on their array index) that are assigned for each eye color duo
+     */
     private void setUpColorCombinations() {
         Random rand = new Random();
         leftEyeColor = rand.nextInt(3);
@@ -214,7 +237,16 @@ public class MatchingRoom extends JComponent implements Room {
         else if (leftEyeColor == BLUE && rightEyeColor == RED) correctPatterns = new int[]{6, 3};
         else if (leftEyeColor == BLUE && rightEyeColor == GREEN) correctPatterns = new int[]{7, 4};
     }
-	
+
+    /**
+     * gets called in the setUpPatternClicked() method in the GameCanvas when the player clicks a pattern in the MatchingRoom
+	 * makes it so that when the pattern is clicked, it puts up a lit up image to indicate that the player clicked that specific pattern
+	 * makes it so that when the first pattern is clicked, when it gets clicked again, it gets unclicked
+	 * checks if the two patterns that the pattern clicked is correct
+	 * sets it up so that if a player clicks the two correct patterns, the two patterns stay lit up
+	 * sets up a timer so that if the player clicks the wrong two patterns, the two patterns stay lit for only a few seconds up so that the player has time to realize that they're wrong
+	 * @param patternIndex pattern's index in the array
+     */
 	public void patternClicked(int patternIndex) {
 		for (int i = 0; i < selectedCount; i++) {
 			if (selectedPatterns[i] == patternIndex) {
@@ -240,6 +272,10 @@ public class MatchingRoom extends JComponent implements Room {
 				puzzleSolved = true;
 				createObjectBounds();
 			} else {
+				// Source: Oracle, "How to Use Swing Timers", The Java™ Tutorials
+				// URL: https://docs.oracle.com/javase/tutorial/uiswing/misc/timer.html#:~:text=If%20you%20want%20the%20timer,in%20the%20event%20dispatch%20thread.
+				// Accessed: May 15, 2025
+				// Note: Used to know how to make a timer only run once (setRepeats(false)).
 				Timer timer = new Timer(1000, e -> {
 					selectedPatterns[0] = -1;
 					selectedPatterns[1] = -1;
@@ -251,7 +287,11 @@ public class MatchingRoom extends JComponent implements Room {
 			}
 		}
 	}
-	
+
+    /**
+     * used in the draw method so that if a pattern is clicked then it draws the lit up version of the pattern
+	 * @param index pattern's index in the array
+     */
 	private boolean isPatternSelected(int index) {
 		for (int i = 0; i < selectedCount; i++) {
 			if (selectedPatterns[i] == index) {
@@ -260,10 +300,17 @@ public class MatchingRoom extends JComponent implements Room {
 		}
 		return false;
 	}
+
+    /**
+     * returns the arraylist of pattern bounds
+     */
     public Rectangle[] getPatternBounds() { 
 		return patternBounds; 
 	}
-	
+
+    /**
+     * returns the boolean state of puzzleSolved
+     */
     public boolean isPuzzleSolved() { 
 		return puzzleSolved; 
 	}

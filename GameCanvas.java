@@ -1,3 +1,19 @@
+/**
+This is the GameCanvas class. It handles the main game logic, player movement, collision detection,
+level progression, and rendering for both Player 1 and Player 2. It also manages timers, attacks,
+and interactions with game objects.
+@author Edward Francis S. Ibera (242267) & Erin Clare G. Maranan (242916)
+@version 19 May 2025
+We have not discussed the Java language code in our program
+with anyone other than our instructor or the teaching assistants
+assigned to this course.
+We have not used Java language code obtained from another student,
+or any other unauthorized source, either modified or unmodified.
+If any Java language code or documentation used in our program
+was obtained from another source, such as a textbook or website,
+that has been clearly noted with a proper citation in the comments
+of our program.
+*/
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.event.*;
@@ -35,14 +51,17 @@ public class GameCanvas extends JComponent {
     private boolean downPressed = false;
     private boolean leftPressed = false;
     private boolean rightPressed = false;
-
-    private Attack playerAttack;
+	
     private ArrayList<TimedAttack> activeAttacks = new ArrayList<>();
     private Health playerLife = new Health();
     private Monster monster;
     private boolean monsterAttacks;
     private boolean canTakeDamage = true;
-
+	
+    /**
+     * This Constructor initializes the game canvas for a specific player with all necessary components.
+     * @param playerNumber identifies whether this is Player 1 or Player 2
+     */
     public GameCanvas(String playerNumber) {
         this.playerNumber = playerNumber;
 
@@ -60,6 +79,9 @@ public class GameCanvas extends JComponent {
         setUpStartMouseClicked();
     }
 
+    /**
+     * initializes each player's character, starting room, game status, and other game elements at the start of the game
+     */
     public void gameStart() {
         if (playerNumber.equals("Player 1")) {
             player = new Player1(600, 300, 100, 100);
@@ -67,14 +89,12 @@ public class GameCanvas extends JComponent {
             gameStat = new Status(playerNumber);
             hint = new Hint();
             clue = new Clue();
-            playerAttack = new Attack(player.getX(), player.getY(), player.getWidth());
         } else if (playerNumber.equals("Player 2")) {
             player = new Player2(472, 639, 100, 100);
             room = new MazeRoom();
             gameStat = new Status(playerNumber);
             hint = new Hint();
             clue = new Clue();
-            playerAttack = new Attack(player.getX(), player.getY(), player.getWidth());
         }
         gameStarted = false;
         gameOver = false;
@@ -83,6 +103,10 @@ public class GameCanvas extends JComponent {
         setUpTimers();
     }
 
+    /**
+     * checks if the player has completed the current level and progresses to the next level if applicable.
+	 * assigns the room for each of players based on their level and player number
+     */
     private void checkForLevelCompletion() {
         Rectangle playerBounds = new Rectangle(player.getX(), player.getY(), player.getWidth(), player.getHeight());
         doorBounds = new Rectangle(461, 46, 104, 146);
@@ -123,6 +147,11 @@ public class GameCanvas extends JComponent {
         }
     }
 
+    /**
+     * updates the position of the other player in the Boss Room.
+     * @param x X-coordinate of other player
+     * @param y Y-coordinate of other player
+     */
     public void updateOtherPlayerPosition(int x, int y) {
         if (otherPlayer == null) {
             if (playerNumber.equals("Player 1")) {
@@ -137,6 +166,9 @@ public class GameCanvas extends JComponent {
         repaint();
     }
 
+    /**
+     * sets up key bindings for player movement and actions.
+     */
     private void setupKeyBindings() {
         InputMap im = getInputMap(WHEN_FOCUSED);
         ActionMap am = getActionMap();
@@ -190,8 +222,11 @@ public class GameCanvas extends JComponent {
         });
     }
 
+    /**
+     * sets up the timer for player movement and animation updates.
+     */
     public void setUpMoveActions() {
-        animationTimer = new javax.swing.Timer(32, new ActionListener() {
+        animationTimer = new Timer (32, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 boolean moved = false;
 
@@ -267,6 +302,9 @@ public class GameCanvas extends JComponent {
         animationTimer.start();
     }
 
+    /**
+     * checks if the player can move up without colliding with objects
+     */
     public boolean canMoveUp() {
         int newWidth = player.getWidth() / 2;
         int xOffset = (player.getWidth() - newWidth) / 2;
@@ -279,6 +317,9 @@ public class GameCanvas extends JComponent {
         return true;
     }
 
+    /**
+     * checks if the player can move down without colliding with objects
+     */
     public boolean canMoveDown() {
         int newWidth = player.getWidth() / 2;
         int xOffset = (player.getWidth() - newWidth) / 2;
@@ -291,6 +332,9 @@ public class GameCanvas extends JComponent {
         return true;
     }
 
+    /**
+     * checks if the player can move left without colliding with objects
+     */
     public boolean canMoveLeft() {
         int newWidth = player.getWidth() / 2;
         int xOffset = (player.getWidth() - newWidth) / 2;
@@ -303,6 +347,9 @@ public class GameCanvas extends JComponent {
         return true;
     }
 
+    /**
+     * checks if the player can move right without colliding with objects
+     */
     public boolean canMoveRight() {
         int newWidth = player.getWidth() / 2;
         int xOffset = (player.getWidth() - newWidth) / 2;
@@ -315,6 +362,10 @@ public class GameCanvas extends JComponent {
         return true;
     }
 
+    /**
+     * checks if the player is near an interactive object in the specified direction
+     * @param direction the direction to check ("up", "down", "left", or "right")
+     */
     public boolean isNearInteractiveObj(String direction) {
         int newWidth = player.getWidth() / 2;
         int xOffset = (player.getWidth() - newWidth) / 2;
@@ -343,6 +394,9 @@ public class GameCanvas extends JComponent {
         return false;
     }
 
+    /**
+     * sets up game timers including level timer and monster movement timers
+     */
     public void setUpTimers() {
         ActionListener levelTimerListener = new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
@@ -355,14 +409,6 @@ public class GameCanvas extends JComponent {
             }
         };
         levelTimer = new Timer(1000, levelTimerListener);
-
-        ActionListener attackTimerListener = new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                playerAttack.moveAttack();
-                repaint();
-            }
-        };
-        attackTimer = new Timer(200, attackTimerListener);
 
         ActionListener monsterTimerListenerL = new ActionListener() {
             int count = 0;
@@ -433,7 +479,10 @@ public class GameCanvas extends JComponent {
         };
         monsterTimerA = new Timer(1000, monsterTimerListenerA);
     }
-
+	
+    /**
+     * sets up mouse listener for the start button
+     */
     private void setUpStartMouseClicked() {
         MouseAdapter ma = new MouseAdapter() {
             @Override
@@ -451,7 +500,9 @@ public class GameCanvas extends JComponent {
         this.addMouseListener(ma);
     }
 
-
+    /**
+     * sets up mouse listener for the hint button
+     */
     private void setUpHintMouseClicked() {
         MouseAdapter ma = new MouseAdapter() {
             @Override
@@ -471,6 +522,9 @@ public class GameCanvas extends JComponent {
         this.addMouseListener(ma);
     }
 
+    /**
+     * sets up mouse listener for clue interactions
+     */
     private void setUpClueMouseClicked() {
         MouseAdapter ma = new MouseAdapter() {
             @Override
@@ -487,6 +541,9 @@ public class GameCanvas extends JComponent {
         this.addMouseListener(ma);
     }
 
+    /**
+     * sets up mouse listener for pattern matching in the MatchingRoom
+     */
     private void setUpPatternMouseClicked() {
         MouseAdapter ma = new MouseAdapter() {
             @Override
@@ -508,6 +565,9 @@ public class GameCanvas extends JComponent {
         this.addMouseListener(ma);
     }
 
+    /**
+     * starts the game by initializing all necessary systems and timers
+     */
     public void startGame() {
         gameStarted = true;
         levelTimer.start();
@@ -519,6 +579,9 @@ public class GameCanvas extends JComponent {
         repaint();
     }
 
+    /**
+     * inner class representing a timed attack with its associated timer
+     */
     private class TimedAttack {
         Attack attack;
         Timer timer;
@@ -529,6 +592,9 @@ public class GameCanvas extends JComponent {
         }
     }
 
+    /**
+     * spawns a new attack from the player's current position
+     */
     private void spawnAttack() {
         if (gameStat.getLevel() != 3) return;
 
@@ -548,6 +614,10 @@ public class GameCanvas extends JComponent {
         attackTimer.start();
     }
 
+    /**
+     * removes an attack from the active attacks list
+     * @param attack the attack to remove
+     */
     private void removeAttack(Attack attack) {
         for (int i = 0; i < activeAttacks.size(); i++) {
             if (activeAttacks.get(i).attack == attack) {
@@ -557,31 +627,54 @@ public class GameCanvas extends JComponent {
         }
     }
 
+    /**
+     * returns the boolean state of gameOver
+     */
     public boolean isGameOver() {
         return gameOver;
     }
-	
+
+    /**
+     * updates the gameOver state
+	 * @param a new gameOver state
+     */
 	public void updateGameOver(boolean a){
 		gameOver = a;
 		repaint();
 	}
 
+    /**
+     * returns the boolean state of bossDefeated
+     */
     public boolean gameIsWon() {
         return bossDefeated;
     }
 
+    /**
+     * returns the player's X-coordinate
+     */
     public int getPlayerX() {
         return player.getX();
     }
 
+    /**
+     * returns the player's Y-coordinate
+     */
     public int getPlayerY() {
         return player.getY();
     }
 
+    /**
+     * returns the player's current level
+     */
     public int getLevel() {
         return gameStat.getLevel();
     }
 
+    /**
+     * sets the current level and initializes the boss room if level 3 is entered
+     * @param level the level to set
+     */
     public void setLevel(int level) {
         gameStat.setLevel(level);
         if (level == 3 && !bossRoomEntered) {
@@ -598,20 +691,34 @@ public class GameCanvas extends JComponent {
         repaint();
     }
 
+    /**
+     * returns the boolean state of playerIsReady
+     */
     public boolean isPlayerReady() {
         return playerIsReady;
     }
 
+    /**
+     * returns the boss's current health
+     */
     public int getBossHp() {
         return bossHp;
     }
 
+    /**
+     * updates the boss's health and repaints the game
+     * @param hp the new health of the boss
+     */
     public void updateBossHp(int hp) {
         bossHp = hp;
         monster.updateHealth(bossHp);
         repaint();
     }
 
+    /**
+     * draws all game components including room, player, monster for BossRoom, attacks, UI elements, and game state screens
+	 * overrides the paintComponent of JComponent
+     */
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -653,6 +760,10 @@ public class GameCanvas extends JComponent {
                 player.getWidth(), player.getHeight()
             );
 
+			// Source: Oracle, "How to Use Swing Timers", The Java™ Tutorials
+			// URL: https://docs.oracle.com/javase/tutorial/uiswing/misc/timer.html#:~:text=If%20you%20want%20the%20timer,in%20the%20event%20dispatch%20thread.
+			// Accessed: May 15, 2025
+			// Note: Used to know how to make a timer only run once (setRepeats(false)).
             if (playerLife.getLifeCount() > 0 && canTakeDamage) {
                 for (Shape attack : monster.getMonsterAttackHitbox()) {
                     if (attack != null && playerBounds.intersects(attack.getBounds2D())) {
